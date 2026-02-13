@@ -1,0 +1,28 @@
+.max-w-md {
+    max-width: 400px;
+}
+
+.max-w-xs {
+    max-width: 250px;
+}
+
+.icon-xs {
+    width: 14px;
+    height: 14px;
+}
+
+.icon-sm {
+    width: 18px;
+    height: 18px;
+}
+
+.badge {
+    font-weight: 600;
+    font-size: 0.75rem;
+    min-width: 40px;
+}
+
+table thead th {
+    letter-spacing: 0.5px;
+    border-bottom-width: 0;
+}

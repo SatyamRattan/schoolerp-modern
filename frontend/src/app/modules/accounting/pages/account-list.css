@@ -1,0 +1,47 @@
+.max-w-md {
+    max-width: 400px;
+}
+
+.avatar-sm {
+    width: 32px;
+    height: 32px;
+    font-size: 0.8rem;
+}
+
+.icon-xs {
+    width: 14px;
+    height: 14px;
+}
+
+.icon-sm {
+    width: 18px;
+    height: 18px;
+}
+
+.tiny {
+    font-size: 0.7rem;
+}
+
+.hover-bg-primary:hover {
+    background: var(--primary-color) !important;
+    color: white !important;
+}
+
+.hover-bg-danger:hover {
+    background: var(--danger) !important;
+    color: white !important;
+}
+
+table thead th {
+    letter-spacing: 0.5px;
+    border-bottom-width: 0;
+}
+
+table tbody tr {
+    transition: background-color 0.2s;
+}
+
+.badge {
+    font-weight: 500;
+    font-size: 0.75rem;
+}

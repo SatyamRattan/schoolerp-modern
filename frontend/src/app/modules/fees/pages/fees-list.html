@@ -1,0 +1,73 @@
+<div class="p-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold mb-1">Fees Structure</h2>
+            <p class="text-muted small mb-0">Define fee heads, groups, and billing frequencies</p>
+        </div>
+        <button class="btn btn-primary d-flex align-items-center">
+            <lucide-icon [name]="plusIcon" class="icon-sm me-2"></lucide-icon>
+            Add Fee Head
+        </button>
+    </div>
+
+    <div class="premium-card p-0 overflow-hidden">
+        <div class="p-4 border-bottom bg-light bg-opacity-50">
+            <div class="search-box d-flex align-items-center max-w-md bg-white border rounded-3 px-3">
+                <lucide-icon [name]="searchIcon" class="text-muted me-2 icon-sm"></lucide-icon>
+                <input type="text" [(ngModel)]="searchTerm"
+                    class="form-control border-0 bg-transparent py-2 shadow-none" placeholder="Search fee heads...">
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-hover mb-0 align-middle">
+                <thead class="bg-light">
+                    <tr>
+                        <th class="ps-4 py-3 text-muted small fw-bold text-uppercase">Fee Heading</th>
+                        <th class="py-3 text-muted small fw-bold text-uppercase">Group</th>
+                        <th class="py-3 text-muted small fw-bold text-uppercase">Frequency</th>
+                        <th class="py-3 text-muted small fw-bold text-uppercase text-center">Monthly Breakdown</th>
+                        <th class="py-3 text-muted small fw-bold text-uppercase text-end pe-4">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (fee of filteredFees(); track fee.id) {
+                    <tr>
+                        <td class="ps-4 py-3 fw-bold">{{fee.fees_heading}}</td>
+                        <td class="py-3">
+                            <div class="d-flex align-items-center">
+                                <lucide-icon [name]="groupIcon" class="icon-xs me-2 text-muted"></lucide-icon>
+                                <span class="text-muted small">{{fee.group_name}}</span>
+                            </div>
+                        </td>
+                        <td class="py-3">
+                            <span
+                                class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-10">
+                                {{fee.frequency}}
+                            </span>
+                        </td>
+                        <td class="py-3 text-center">
+                            <div class="month-dots d-flex justify-content-center">
+                                @for (m of [1,2,3,4,5,6,7,8,9,10,11,12]; track m) {
+                                <div class="month-dot" [class.active]="true" [title]="'Month ' + m"></div>
+                                }
+                            </div>
+                        </td>
+                        <td class="py-3 text-end pe-4">
+                            <button class="btn btn-light btn-sm text-primary">Edit</button>
+                        </td>
+                    </tr>
+                    }
+                    @if (loading) {
+                    <tr>
+                        <td colspan="5" class="text-center py-5">
+                            <div class="spinner-border text-primary spinner-border-sm me-2"></div>
+                            <span class="text-muted small">Loading fees structure...</span>
+                        </td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

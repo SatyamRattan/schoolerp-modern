@@ -1,0 +1,178 @@
+<div class="container mt-4">
+    <h2>Academic Masters Management</h2>
+
+    <!-- Tabs -->
+    <ul class="nav nav-tabs mb-4">
+        <li class="nav-item">
+            <a class="nav-link" [class.active]="activeTab === 'subjects'" (click)="activeTab = 'subjects'">
+                Subjects
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" [class.active]="activeTab === 'terms'" (click)="activeTab = 'terms'">
+                Terms
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" [class.active]="activeTab === 'assessments'" (click)="activeTab = 'assessments'">
+                Assessments
+            </a>
+        </li>
+    </ul>
+
+    <!-- Subjects Tab -->
+    <div *ngIf="activeTab === 'subjects'">
+        <div class="card mb-3">
+            <div class="card-header">Add New Subject</div>
+            <div class="card-body">
+                <form (ngSubmit)="addSubject()" #subjectForm="ngForm">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" [(ngModel)]="newSubject.subject_name"
+                                name="subject_name" placeholder="Enter subject name" required>
+                        </div>
+                        <div class="col-md-4">
+                            <button type="submit" class="btn btn-primary w-100" [disabled]="!subjectForm.form.valid">
+                                Add Subject
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">Subjects List</div>
+            <div class="card-body">
+                <div *ngIf="loading" class="text-center">
+                    <div class="spinner-border"></div>
+                </div>
+                <div *ngIf="!loading && subjects.length === 0" class="alert alert-info">
+                    No subjects found. Add your first subject above.
+                </div>
+                <table class="table table-striped" *ngIf="!loading && subjects.length > 0">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Subject Name</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let subject of subjects">
+                            <td>{{ subject.id }}</td>
+                            <td>{{ subject.subject_name }}</td>
+                            <td>
+                                <button class="btn btn-sm btn-danger" (click)="deleteSubject(subject.id!)">
+                                    Delete
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Terms Tab -->
+    <div *ngIf="activeTab === 'terms'">
+        <div class="card mb-3">
+            <div class="card-header">Add New Term</div>
+            <div class="card-body">
+                <form (ngSubmit)="addTerm()" #termForm="ngForm">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" [(ngModel)]="newTerm.term_name" name="term_name"
+                                placeholder="Enter term name" required>
+                        </div>
+                        <div class="col-md-4">
+                            <button type="submit" class="btn btn-primary w-100" [disabled]="!termForm.form.valid">
+                                Add Term
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">Terms List</div>
+            <div class="card-body">
+                <div *ngIf="terms.length === 0" class="alert alert-info">
+                    No terms found. Add your first term above.
+                </div>
+                <table class="table table-striped" *ngIf="terms.length > 0">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Term Name</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let term of terms">
+                            <td>{{ term.id }}</td>
+                            <td>{{ term.term_name }}</td>
+                            <td>
+                                <button class="btn btn-sm btn-danger" (click)="deleteTerm(term.id!)">
+                                    Delete
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Assessments Tab -->
+    <div *ngIf="activeTab === 'assessments'">
+        <div class="card mb-3">
+            <div class="card-header">Add New Assessment</div>
+            <div class="card-body">
+                <form (ngSubmit)="addAssessment()" #assessmentForm="ngForm">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" [(ngModel)]="newAssessment.assessment_name"
+                                name="assessment_name" placeholder="Enter assessment name" required>
+                        </div>
+                        <div class="col-md-4">
+                            <button type="submit" class="btn btn-primary w-100" [disabled]="!assessmentForm.form.valid">
+                                Add Assessment
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">Assessments List</div>
+            <div class="card-body">
+                <div *ngIf="assessments.length === 0" class="alert alert-info">
+                    No assessments found. Add your first assessment above.
+                </div>
+                <table class="table table-striped" *ngIf="assessments.length > 0">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Assessment Name</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let assessment of assessments">
+                            <td>{{ assessment.id }}</td>
+                            <td>{{ assessment.assessment_name }}</td>
+                            <td>
+                                <button class="btn btn-sm btn-danger" (click)="deleteAssessment(assessment.id!)">
+                                    Delete
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

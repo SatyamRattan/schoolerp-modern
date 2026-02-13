@@ -1,0 +1,78 @@
+<div class="p-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold mb-1">Daily Attendance</h2>
+            <p class="text-muted small mb-0">Record and manage daily student presence</p>
+        </div>
+        <div class="d-flex gap-2">
+            <button class="btn btn-outline-primary border-2 fw-bold px-4 py-2 rounded-3" (click)="saveAttendance()">
+                Save Attendance
+            </button>
+        </div>
+    </div>
+
+    <div class="premium-card p-4 mb-4">
+        <div class="row g-3">
+            <div class="col-12 col-md-3">
+                <label class="form-label small fw-bold text-muted">DATE</label>
+                <input type="date" [(ngModel)]="selectedDate" class="form-control bg-light border-0 py-2">
+            </div>
+            <div class="col-12 col-md-3">
+                <label class="form-label small fw-bold text-muted">CLASS</label>
+                <select [(ngModel)]="selectedClass" class="form-select bg-light border-0 py-2">
+                    <option value="10">Class 10</option>
+                    <option value="9">Class 9</option>
+                </select>
+            </div>
+            <div class="col-12 col-md-3">
+                <label class="form-label small fw-bold text-muted">SECTION</label>
+                <select [(ngModel)]="selectedSection" class="form-select bg-light border-0 py-2">
+                    <option value="A">Section A</option>
+                    <option value="B">Section B</option>
+                </select>
+            </div>
+            <div class="col-12 col-md-3 d-flex align-items-end">
+                <button class="btn btn-primary w-100 py-2">Fetch Student List</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="premium-card p-0 overflow-hidden">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0 align-middle">
+                <thead class="bg-light">
+                    <tr>
+                        <th class="ps-4 py-3 text-muted small fw-bold text-uppercase">Roll No</th>
+                        <th class="py-3 text-muted small fw-bold text-uppercase">Student Name</th>
+                        <th class="py-3 text-muted small fw-bold text-uppercase text-center">Status</th>
+                        <th class="py-3 text-muted small fw-bold text-uppercase text-end pe-4">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let s of students">
+                        <td class="ps-4 py-3 fw-bold text-muted">{{s.roll}}</td>
+                        <td class="py-3">
+                            <div class="fw-bold">{{s.name}}</div>
+                        </td>
+                        <td class="py-3 text-center">
+                            <span class="status-badge"
+                                [ngClass]="{'present': s.status === 'P', 'absent': s.status === 'A', 'leave': s.status === 'L'}">
+                                {{s.status === 'P' ? 'Present' : s.status === 'A' ? 'Absent' : 'Leave'}}
+                            </span>
+                        </td>
+                        <td class="py-3 text-end pe-4">
+                            <div class="btn-group shadow-sm">
+                                <button class="btn btn-sm" [class.btn-success]="s.status === 'P'"
+                                    [class.btn-light]="s.status !== 'P'" (click)="setStatus(s.id, 'P')">P</button>
+                                <button class="btn btn-sm" [class.btn-danger]="s.status === 'A'"
+                                    [class.btn-light]="s.status !== 'A'" (click)="setStatus(s.id, 'A')">A</button>
+                                <button class="btn btn-sm" [class.btn-warning]="s.status === 'L'"
+                                    [class.btn-light]="s.status !== 'L'" (click)="setStatus(s.id, 'L')">L</button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

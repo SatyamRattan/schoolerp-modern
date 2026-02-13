@@ -1,0 +1,68 @@
+<div class="sidebar d-flex flex-column h-100">
+  <div class="sidebar-header p-4 d-flex align-items-center">
+    <div class="logo-box me-2">S</div>
+    <span class="fs-4 fw-bold">SchoolErp</span>
+  </div>
+
+  <nav class="flex-grow-1 p-2 overflow-auto">
+    <div *ngFor="let item of menuItems" [routerLink]="item.route" routerLinkActive="active"
+      class="nav-item d-flex align-items-center p-3 mb-1 rounded-3">
+      <lucide-icon [name]="item.icon" class="me-3"></lucide-icon>
+      <span class="nav-label">{{item.label}}</span>
+    </div>
+
+    <!-- Attendance -->
+    <div routerLink="/attendance/mark" routerLinkActive="active"
+      class="nav-item d-flex align-items-center p-3 mb-1 rounded-3">
+      <lucide-icon [name]="attendanceIcon" class="me-3"></lucide-icon>
+      <span class="nav-label">Attendance</span>
+    </div>
+
+    <!-- Fees Submenu -->
+    <div (click)="toggleFees()" class="nav-item d-flex align-items-center p-3 mb-1 rounded-3"
+      [class.active]="feesExpanded">
+      <lucide-icon [name]="feesIcon" class="me-3"></lucide-icon>
+      <span class="nav-label flex-grow-1">Fees</span>
+      <lucide-icon [name]="feesExpanded ? upIcon : downIcon" class="icon-xs"></lucide-icon>
+    </div>
+
+    <div *ngIf="feesExpanded" class="submenu ps-4">
+      <div routerLink="/fees/heads" routerLinkActive="sub-active"
+        class="nav-item d-flex align-items-center p-3 mb-1 rounded-3">
+        <span class="nav-label small">Fee Heads</span>
+      </div>
+    </div>
+
+    <!-- Accounting Submenu -->
+    <div (click)="toggleAccounting()" class="nav-item d-flex align-items-center p-3 mb-1 rounded-3"
+      [class.active]="accountingExpanded">
+      <lucide-icon [name]="accountingIcon" class="me-3"></lucide-icon>
+      <span class="nav-label flex-grow-1">Accounting</span>
+      <lucide-icon [name]="accountingExpanded ? upIcon : downIcon" class="icon-xs"></lucide-icon>
+    </div>
+
+    <div *ngIf="accountingExpanded" class="submenu ps-4">
+      <div routerLink="/accounting/accounts" routerLinkActive="sub-active"
+        class="nav-item d-flex align-items-center p-3 mb-1 rounded-3">
+        <span class="nav-label small">Chart of Accounts</span>
+      </div>
+      <div routerLink="/accounting/journal" routerLinkActive="sub-active"
+        class="nav-item d-flex align-items-center p-3 mb-1 rounded-3">
+        <span class="nav-label small">Journal Entries</span>
+      </div>
+    </div>
+
+    <div routerLink="/settings" routerLinkActive="active"
+      class="nav-item d-flex align-items-center p-3 mb-1 rounded-3 mt-auto">
+      <lucide-icon [name]="settingsIcon" class="me-3"></lucide-icon>
+      <span class="nav-label">Settings</span>
+    </div>
+  </nav>
+
+  <div class="sidebar-footer p-3 border-top border-secondary">
+    <div class="nav-item d-flex align-items-center p-3 rounded-3 text-danger logout-btn">
+      <lucide-icon [name]="logoutIcon" class="me-3"></lucide-icon>
+      <span class="nav-label">Logout</span>
+    </div>
+  </div>
+</div>

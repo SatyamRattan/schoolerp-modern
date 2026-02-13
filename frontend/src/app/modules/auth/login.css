@@ -1,0 +1,26 @@
+.login-card {
+    width: 100%;
+    max-width: 420px;
+}
+
+.logo-box {
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.input-group-text {
+    border-right: none;
+}
+
+.form-control:focus {
+    box-shadow: none;
+    border-color: #dee2e6;
+}
+
+.icon-sm {
+    width: 18px;
+    height: 18px;
+}

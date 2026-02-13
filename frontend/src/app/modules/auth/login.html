@@ -1,0 +1,48 @@
+<div class="login-page d-flex align-items-center justify-content-center bg-light min-vh-100">
+    <div class="login-card premium-card p-5 bg-white">
+        <div class="text-center mb-5">
+            <div class="logo-box mx-auto mb-3 bg-primary text-white fs-2 fw-bold rounded-3">S</div>
+            <h2 class="fw-bold">Welcome Back</h2>
+            <p class="text-muted">Login to manage your school ERP</p>
+        </div>
+
+        <form (ngSubmit)="onLogin()" #loginForm="ngForm">
+            <div class="mb-4">
+                <label class="form-label small fw-bold text-muted">USERNAME</label>
+                <div class="input-group">
+                    <span class="input-group-text bg-transparent border-end-0">
+                        <lucide-icon [name]="userIcon" class="icon-sm text-muted"></lucide-icon>
+                    </span>
+                    <input type="text" name="username" [(ngModel)]="username" class="form-control border-start-0 ps-0"
+                        placeholder="Enter username" required>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label small fw-bold text-muted">PASSWORD</label>
+                <div class="input-group">
+                    <span class="input-group-text bg-transparent border-end-0">
+                        <lucide-icon [name]="lockIcon" class="icon-sm text-muted"></lucide-icon>
+                    </span>
+                    <input type="password" name="password" [(ngModel)]="password"
+                        class="form-control border-start-0 ps-0" placeholder="Enter password" required>
+                </div>
+            </div>
+
+            <div *ngIf="error" class="alert alert-danger py-2 small mb-4">
+                {{error}}
+            </div>
+
+            <button type="submit" [disabled]="loading || !loginForm.valid"
+                class="btn btn-primary w-100 d-flex align-items-center justify-content-center py-2">
+                <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
+                <lucide-icon *ngIf="!loading" [name]="loginIcon" class="icon-sm me-2"></lucide-icon>
+                {{ loading ? 'Logging in...' : 'Sign In' }}
+            </button>
+        </form>
+
+        <div class="mt-4 text-center">
+            <p class="small text-muted mb-0 font-weight-bold">Demo Login: admin / admin</p>
+        </div>
+    </div>
+</div>

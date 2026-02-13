@@ -1,0 +1,69 @@
+<div class="p-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold mb-1">Journal Entries</h2>
+            <p class="text-muted small mb-0">Record and track manual financial adjustments</p>
+        </div>
+        <button class="btn btn-primary d-flex align-items-center">
+            <lucide-icon [name]="plusIcon" class="icon-sm me-2"></lucide-icon>
+            New Journal Entry
+        </button>
+    </div>
+
+    <div class="premium-card p-0 overflow-hidden">
+        <div class="p-4 border-bottom bg-light bg-opacity-50">
+            <div class="search-box d-flex align-items-center max-w-md bg-white border rounded-3 px-3">
+                <lucide-icon [name]="searchIcon" class="text-muted me-2 icon-sm"></lucide-icon>
+                <input type="text" [(ngModel)]="searchTerm"
+                    class="form-control border-0 bg-transparent py-2 shadow-none" placeholder="Search entries...">
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-hover mb-0 align-middle">
+                <thead class="bg-light">
+                    <tr>
+                        <th class="ps-4 py-3 text-muted small fw-bold text-uppercase">Vch No</th>
+                        <th class="py-3 text-muted small fw-bold text-uppercase">Date</th>
+                        <th class="py-3 text-muted small fw-bold text-uppercase">Account Name</th>
+                        <th class="py-3 text-muted small fw-bold text-uppercase">Narration</th>
+                        <th class="py-3 text-muted small fw-bold text-uppercase">Amount</th>
+                        <th class="py-3 text-muted small fw-bold text-uppercase text-end pe-4">Type</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let j of filteredJournals()">
+                        <td class="ps-4 py-3 fw-bold text-primary">#{{j.voucher_no}}</td>
+                        <td class="py-3 text-muted small">
+                            <div class="d-flex align-items-center">
+                                <lucide-icon [name]="calendarIcon" class="icon-xs me-2 text-muted"></lucide-icon>
+                                {{j.date | date:'mediumDate'}}
+                            </div>
+                        </td>
+                        <td class="py-3 fw-semibold">{{j.account_name}}</td>
+                        <td class="py-3 text-muted small text-truncate max-w-xs">{{j.short_narration}}</td>
+                        <td class="py-3 fw-bold">₹{{j.amount | number}}</td>
+                        <td class="py-3 text-end pe-4">
+                            <span class="badge"
+                                [ngClass]="j.d_c === 'Dr' ? 'bg-info-subtle text-info' : 'bg-success-subtle text-success'">
+                                {{j.d_c}}
+                            </span>
+                        </td>
+                    </tr>
+                    <tr *ngIf="loading">
+                        <td colspan="6" class="text-center py-5">
+                            <div class="spinner-border text-primary spinner-border-sm me-2"></div>
+                            <span class="text-muted small">Loading entries...</span>
+                        </td>
+                    </tr>
+                    <tr *ngIf="!loading && filteredJournals().length === 0">
+                        <td colspan="6" class="text-center py-5">
+                            <lucide-icon [name]="plusIcon" class="text-muted mb-2 fs-2 opacity-50"></lucide-icon>
+                            <p class="text-muted mb-0">No journal entries found.</p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

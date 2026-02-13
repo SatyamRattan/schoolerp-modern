@@ -1,0 +1,33 @@
+.icon-xs {
+    width: 14px;
+    height: 14px;
+}
+
+.icon-sm {
+    width: 18px;
+    height: 18px;
+}
+
+.month-dots {
+    gap: 4px;
+}
+
+.month-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #e2e8f0;
+}
+
+.month-dot.active {
+    background: var(--success);
+}
+
+.badge {
+    font-weight: 500;
+    font-size: 0.75rem;
+}
+
+.max-w-md {
+    max-width: 400px;
+}

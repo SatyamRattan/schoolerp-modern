@@ -1,0 +1,19 @@
+.stat-icon lucide-icon {
+    width: 24px;
+    height: 24px;
+}
+
+.placeholder-chart {
+    border: 2px dashed #e2e8f0;
+}
+
+.activity-dot {
+    width: 10px;
+    height: 10px;
+    background: var(--primary-color);
+    border-radius: 50%;
+}
+
+.tiny {
+    font-size: 0.75rem;
+}

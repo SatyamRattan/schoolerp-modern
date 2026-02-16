@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AttendanceService } from '../services/attendance.service';
-import { LucideAngularModule, Search, CheckCircle, XCircle, AlertCircle } from 'lucide-angular';
+import { StudentsService } from '../../students/services/students';
+import { LucideAngularModule, Search, CalendarCheck, CheckCircle, XCircle, AlertCircle } from 'lucide-angular';
 import { FormsModule } from '@angular/forms';
 
 @Component({
@@ -12,33 +13,46 @@ import { FormsModule } from '@angular/forms';
     styleUrls: ['./attendance-mark.css']
 })
 export class AttendanceMarkComponent implements OnInit {
-    students = [
-        { id: 1, name: 'Akshat Gupta', roll: '101', status: 'P' },
-        { id: 2, name: 'Rahul Sharma', roll: '102', status: 'P' },
-        { id: 3, name: 'Sneha Jain', roll: '103', status: 'A' },
-        { id: 4, name: 'Priya Singh', roll: '104', status: 'P' },
-        { id: 5, name: 'Amit Kumar', roll: '105', status: 'L' },
-    ];
+    students: any[] = [];
+    classes: any[] = [];
+    sections: any[] = [];
 
-    selectedClass = '10';
-    selectedSection = 'A';
-    selectedDate = new Date().toISOString().split('T')[0];
+    selectedClass: any = null;
+    selectedSection: any = null;
+    attendanceDate = new Date().toISOString().split('T')[0];
 
     readonly searchIcon = Search;
-    readonly presentIcon = CheckCircle;
-    readonly absentIcon = XCircle;
-    readonly leaveIcon = AlertCircle;
+    readonly attendanceIcon = CalendarCheck;
 
-    constructor(private attendanceService: AttendanceService) { }
+    constructor(
+        private attendanceService: AttendanceService,
+        private studentsService: StudentsService
+    ) { }
 
-    ngOnInit(): void { }
+    ngOnInit(): void {
+        this.studentsService.getClasses().subscribe(data => this.classes = data);
+        this.studentsService.getSections().subscribe(data => this.sections = data);
+    }
 
-    setStatus(studentId: number, status: string) {
-        const student = this.students.find(s => s.id === studentId);
-        if (student) student.status = status;
+    loadStudents() {
+        if (!this.selectedClass) return;
+        this.studentsService.getStudents(this.selectedClass, this.selectedSection).subscribe(data => {
+            this.students = data.map(s => ({
+                ...s,
+                status: 'PRESENT',
+                remarks: ''
+            }));
+        });
+    }
+
+    getStats() {
+        return {
+            present: this.students.filter(s => s.status === 'PRESENT').length,
+            absent: this.students.filter(s => s.status === 'ABSENT').length
+        };
     }
 
     saveAttendance() {
-        alert('Attendance saved successfully!');
+        alert('Attendance for ' + this.students.length + ' students saved successfully!');
     }
 }

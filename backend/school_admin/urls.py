@@ -3,7 +3,7 @@ from rest_framework.routers import DefaultRouter
 from .views import (
     OrganisationInfoViewSet, AdminAccountViewSet, OwnerViewSet, 
     ContactUsViewSet, FeedbackViewSet, TermsViewSet, 
-    RouteViewSet, RoutePlanViewSet
+    RouteViewSet, RoutePlanViewSet, AcademicYearViewSet
 )
 
 router = DefaultRouter()
@@ -15,6 +15,7 @@ router.register(r'feedback', FeedbackViewSet)
 router.register(r'terms', TermsViewSet)
 router.register(r'routes', RouteViewSet)
 router.register(r'route-plans', RoutePlanViewSet)
+router.register(r'academic-years', AcademicYearViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),

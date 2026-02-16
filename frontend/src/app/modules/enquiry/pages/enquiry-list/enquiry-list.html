@@ -1,0 +1,115 @@
+<div class="row">
+    <div class="col-12">
+        <div class="card card-body border-0 shadow mb-4">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2 class="h5">Admissions Enquiry</h2>
+                <button class="btn btn-primary" (click)="openAddModal()">
+                    <lucide-angular [img]="Plus" class="icon icon-xs me-2"></lucide-angular> New Enquiry
+                </button>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-centered table-nowrap mb-0 rounded">
+                    <thead class="thead-light">
+                        <tr>
+                            <th class="border-0">Student Name</th>
+                            <th class="border-0">Parent</th>
+                            <th class="border-0">Applying For</th>
+                            <th class="border-0">Contact</th>
+                            <th class="border-0">Status</th>
+                            <th class="border-0">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let e of enquiries">
+                            <td class="fw-bold">{{ e.student_name }}</td>
+                            <td>{{ e.parent_name }}</td>
+                            <td>Class {{ e.class_applying_for }}</td>
+                            <td>
+                                <div><small>{{ e.email }}</small></div>
+                                <div><small>{{ e.phone }}</small></div>
+                            </td>
+                            <td>
+                                <span class="badge" [ngClass]="{
+                                    'bg-info': e.status === 'NEW',
+                                    'bg-warning': e.status === 'CONTACTED',
+                                    'bg-success': e.status === 'CONVERTED',
+                                    'bg-secondary': e.status === 'CLOSED'
+                                }">{{ e.status }}</span>
+                            </td>
+                            <td>
+                                <div class="btn-group">
+                                    <button class="btn btn-sm btn-outline-primary" (click)="openEditModal(e)"
+                                        title="Edit">Details</button>
+                                    <button *ngIf="e.status === 'NEW'" class="btn btn-sm btn-outline-warning"
+                                        (click)="updateStatus(e, 'CONTACTED')" title="Mark Contacted">
+                                        <lucide-angular [img]="PhoneCall" class="icon icon-xs"></lucide-angular>
+                                    </button>
+                                    <button *ngIf="e.status !== 'CONVERTED'" class="btn btn-sm btn-outline-success"
+                                        (click)="updateStatus(e, 'CONVERTED')" title="Convert to Admission">
+                                        <lucide-angular [img]="CheckCircle" class="icon icon-xs"></lucide-angular>
+                                    </button>
+                                    <button *ngIf="e.status !== 'CLOSED'" class="btn btn-sm btn-outline-secondary"
+                                        (click)="updateStatus(e, 'CLOSED')" title="Close Enquiry">
+                                        <lucide-angular [img]="XCircle" class="icon icon-xs"></lucide-angular>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr *ngIf="enquiries.length === 0">
+                            <td colspan="6" class="text-center py-3">No enquiries found.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade show d-block" *ngIf="showModal" tabindex="-1" style="background: rgba(0,0,0,0.5)">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">{{ isEditing ? 'Edit' : 'New' }} Enquiry</h5>
+                <button type="button" class="btn-close" (click)="showModal = false"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label class="form-label">Student Name</label>
+                    <input type="text" class="form-control" [(ngModel)]="currentEnquiry.student_name">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Parent Name</label>
+                    <input type="text" class="form-control" [(ngModel)]="currentEnquiry.parent_name">
+                </div>
+                <div class="row">
+                    <div class="col-6 mb-3">
+                        <label class="form-label">Phone</label>
+                        <input type="text" class="form-control" [(ngModel)]="currentEnquiry.phone">
+                    </div>
+                    <div class="col-6 mb-3">
+                        <label class="form-label">Class</label>
+                        <input type="text" class="form-control" [(ngModel)]="currentEnquiry.class_applying_for">
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-control" [(ngModel)]="currentEnquiry.email">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Previous School</label>
+                    <input type="text" class="form-control" [(ngModel)]="currentEnquiry.previous_school">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Remarks</label>
+                    <textarea class="form-control" rows="2" [(ngModel)]="currentEnquiry.remarks"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" (click)="showModal = false">Cancel</button>
+                <button type="button" class="btn btn-primary" (click)="saveEnquiry()">Save</button>
+            </div>
+        </div>
+    </div>
+</div>

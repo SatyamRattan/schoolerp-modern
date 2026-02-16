@@ -1,0 +1,58 @@
+<div class="row">
+    <div class="col-12">
+        <div class="card card-body border-0 shadow mb-4">
+            <h2 class="h5 mb-4">Class Time Table</h2>
+
+            <div class="row mb-4">
+                <div class="col-md-4">
+                    <label class="form-label">Class</label>
+                    <select class="form-select" [(ngModel)]="selectedClass" (change)="onClassChange()">
+                        <option *ngFor="let c of classes" [value]="c.id">{{ c.name }}</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Section</label>
+                    <select class="form-select" [(ngModel)]="selectedSection" (change)="loadTimeTable()"
+                        [disabled]="!selectedClass">
+                        <option *ngFor="let s of sections" [value]="s.id">{{ s.name }}</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="table-responsive" *ngIf="periods.length > 0">
+                <table class="table table-bordered text-center mb-0">
+                    <thead class="thead-light">
+                        <tr>
+                            <th class="border-0">Day / Period</th>
+                            <th *ngFor="let p of periods" class="border-0">
+                                {{ p.name }} <br>
+                                <span class="badge bg-secondary text-white small">
+                                    {{ p.start_time | slice:0:5 }} - {{ p.end_time | slice:0:5 }}
+                                </span>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let day of days">
+                            <td class="fw-bold bg-light">{{ day.name }}</td>
+                            <td *ngFor="let p of periods">
+                                <div *ngIf="getEntry(day.id, p.id!) as entry; else emptySlot"
+                                    class="p-2 rounded bg-soft-primary">
+                                    <div class="fw-bold text-primary">{{ entry.subject_name }}</div>
+                                    <div class="small text-muted">{{ entry.teacher_name }}</div>
+                                </div>
+                                <ng-template #emptySlot>
+                                    <span class="text-muted small">-</span>
+                                </ng-template>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div *ngIf="periods.length === 0" class="text-center py-5">
+                <p class="text-muted">No periods defined. Please configure periods first.</p>
+            </div>
+        </div>
+    </div>
+</div>

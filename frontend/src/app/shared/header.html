@@ -1,25 +1,114 @@
-<header class="header d-flex justify-content-between align-items-center bg-white px-4 border-bottom">
-    <div class="search-box d-flex align-items-center flex-grow-1 max-w-lg">
-        <lucide-icon [name]="searchIcon" class="text-muted me-2"></lucide-icon>
-        <input type="text" class="form-control border-0 bg-transparent"
-            placeholder="Search for students, fees, reports...">
+<header class="top-header d-flex align-items-center justify-content-between">
+    <!-- Global Search -->
+    <div class="search-wrapper d-none d-lg-block">
+        <lucide-icon [name]="Search" class="search-icon size-18"></lucide-icon>
+        <input type="text" class="search-input" placeholder="Find students, staff, or records..."
+            [(ngModel)]="searchQuery" (input)="onSearchInput()" (focus)="onSearchInput()" (blur)="hideResults()">
+
+        <!-- Quick Search Results -->
+        <div *ngIf="showSearchResults && filteredSearchItems.length > 0"
+            class="search-results-dropdown shadow-lg animate-fade-in">
+            <div class="p-2 border-bottom tiny fw-bold text-muted bg-light px-3">QUICK NAVIGATION</div>
+            <div class="results-list overflow-auto" style="max-height: 300px;">
+                <div *ngFor="let item of filteredSearchItems"
+                    class="result-item p-3 d-flex align-items-center justify-content-between cursor-pointer border-bottom"
+                    (click)="navigateToResult(item.route)">
+                    <div>
+                        <p class="mb-0 fw-600 small text-main">{{item.label}}</p>
+                        <p class="mb-0 tiny text-muted">{{item.category}}</p>
+                    </div>
+                    <lucide-icon [name]="ChevronDown" class="rotate-270 size-14 text-muted opacity-50"></lucide-icon>
+                </div>
+            </div>
+            <div *ngIf="filteredSearchItems.length === 0" class="p-3 text-center tiny text-muted">
+                No matching pages found
+            </div>
+        </div>
     </div>
 
-    <div class="header-actions d-flex align-items-center">
-        <div class="notification-pill position-relative me-4">
-            <lucide-icon [name]="bellIcon" class="text-muted"></lucide-icon>
-            <span
-                class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle"></span>
+    <div class="d-flex align-items-center gap-2">
+        <!-- Notifications -->
+        <div class="position-relative">
+            <button class="nav-icon-btn position-relative" (click)="toggleNotificationsDropdown()">
+                <lucide-icon [name]="Bell" class="size-22"></lucide-icon>
+                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                    style="margin-top: 10px; margin-left: -10px;">
+                    3
+                </span>
+            </button>
+
+            <!-- Notifications Dropdown -->
+            <div *ngIf="showNotificationsDropdown" class="notifications-dropdown shadow-lg animate-fade-in">
+                <div class="dropdown-header p-3 border-bottom d-flex justify-content-between align-items-center">
+                    <h6 class="mb-0 fw-bold">Recent Notifications</h6>
+                    <span class="badge bg-primary-light text-primary">3 New</span>
+                </div>
+                <div class="dropdown-body py-1 overflow-auto" style="max-height: 350px;">
+                    <div *ngFor="let note of notifications"
+                        class="notification-item p-3 d-flex gap-3 border-bottom cursor-pointer">
+                        <div class="note-icon-box" [ngClass]="'bg-' + note.type + '-light text-' + note.type">
+                            <lucide-icon
+                                [name]="note.icon === 'UserCircle' ? UserCircle : (note.icon === 'Calendar' ? Calendar : Bell)"
+                                class="size-18"></lucide-icon>
+                        </div>
+                        <div class="note-content">
+                            <p class="mb-1 fw-600 small text-main">{{note.title}}</p>
+                            <p class="mb-0 tiny text-muted">{{note.time}}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-2 text-center border-top">
+                    <a routerLink="/notices" (click)="showNotificationsDropdown = false"
+                        class="tiny fw-bold text-primary text-decoration-none">View All Notices</a>
+                </div>
+            </div>
         </div>
 
-        <div class="user-profile d-flex align-items-center bg-light p-2 px-3 rounded-pill cursor-pointer">
-            <div
-                class="user-avatar bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-2">
-                <lucide-icon [name]="userIcon" class="icon-sm"></lucide-icon>
+        <!-- Calendar Quick Access -->
+        <button class="nav-icon-btn" title="Quick Calendar" (click)="onCalendarClick()">
+            <lucide-icon [name]="Calendar" class="size-22"></lucide-icon>
+        </button>
+
+        <div class="vr mx-2 my-2 opacity-10"></div>
+
+        <!-- User Profile -->
+        <div class="position-relative">
+            <div class="profile-trigger" (click)="toggleProfileDropdown()">
+                <div class="user-avatar shadow-sm">
+                    AD
+                </div>
+                <div class="user-info d-none d-sm-block">
+                    <p class="mb-0 fw-bold text-main small">Administrator</p>
+                    <p class="mb-0 tiny text-muted">Super Admin Account</p>
+                </div>
+                <lucide-icon [name]="ChevronDown" class="size-16 ms-2 opacity-50"
+                    [class.rotate-180]="showProfileDropdown"></lucide-icon>
             </div>
-            <div class="user-info d-none d-md-block">
-                <p class="mb-0 fw-bold small lh-1">Admin User</p>
-                <p class="mb-0 text-muted tiny lh-1">Super Admin</p>
+
+            <!-- Profile Dropdown Menu -->
+            <div *ngIf="showProfileDropdown" class="profile-dropdown-menu shadow-lg animate-fade-in">
+                <div class="dropdown-header p-3 border-bottom bg-light bg-opacity-50">
+                    <p class="mb-0 fw-bold text-main">Administrator</p>
+                    <p class="mb-0 tiny text-muted text-truncate">admin@schoolerp.com</p>
+                </div>
+                <div class="dropdown-body py-2">
+                    <a routerLink="/settings" [queryParams]="{tab: 'profile'}"
+                        class="dropdown-item d-flex align-items-center px-3 py-2" (click)="showProfileDropdown = false">
+                        <lucide-icon [name]="UserCircle" class="size-18 me-3 text-muted"></lucide-icon>
+                        <span class="small fw-600">My Profile</span>
+                    </a>
+                    <a routerLink="/settings" class="dropdown-item d-flex align-items-center px-3 py-2"
+                        (click)="showProfileDropdown = false">
+                        <lucide-icon [name]="Settings" class="size-18 me-3 text-muted"></lucide-icon>
+                        <span class="small fw-600">Settings</span>
+                    </a>
+                    <hr class="my-2 opacity-10">
+                    <a class="dropdown-item d-flex align-items-center px-3 py-2 text-danger"
+                        (click)="logout(); showProfileDropdown = false">
+                        <lucide-icon [name]="LogOut" class="size-18 me-3"></lucide-icon>
+                        <span class="small fw-bold">Sign Out</span>
+                    </a>
+                </div>
             </div>
         </div>
     </div>

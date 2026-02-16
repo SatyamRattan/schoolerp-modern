@@ -1,0 +1,113 @@
+<div class="row">
+    <div class="col-12">
+        <div class="card card-body border-0 shadow mb-4">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="h5">Library Inventory</h2>
+                <button class="btn btn-primary btn-sm" (click)="openAddModal()">
+                    <lucide-angular [img]="Plus" class="icon icon-xs me-2"></lucide-angular> Add Book
+                </button>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-centered table-nowrap mb-0 rounded">
+                    <thead class="thead-light">
+                        <tr>
+                            <th class="border-0 rounded-start">Title</th>
+                            <th class="border-0">Author</th>
+                            <th class="border-0">Category</th>
+                            <th class="border-0">ISBN</th>
+                            <th class="border-0">Availability</th>
+                            <th class="border-0 rounded-end">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let book of books">
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <span class="fw-bold">{{ book.title }}</span>
+                                </div>
+                            </td>
+                            <td>{{ book.author }}</td>
+                            <td>{{ book.category_name }}</td>
+                            <td>{{ book.isbn }}</td>
+                            <td>
+                                <span class="badge" [ngClass]="book.available > 0 ? 'bg-success' : 'bg-danger'">
+                                    {{ book.available }} / {{ book.quantity }}
+                                </span>
+                            </td>
+                            <td>
+                                <div class="btn-group">
+                                    <button class="btn btn-sm btn-outline-primary" (click)="openEditModal(book)">
+                                        <lucide-angular [img]="Edit" class="icon icon-xs"></lucide-angular>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-danger" (click)="deleteBook(book.id!)">
+                                        <lucide-angular [img]="Trash2" class="icon icon-xs"></lucide-angular>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr *ngIf="books.length === 0 && !loading">
+                            <td colspan="6" class="text-center py-4">No books found.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade show" tabindex="-1" *ngIf="showModal" style="display: block; background: rgba(0,0,0,0.5)">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">{{ editingBook ? 'Edit Book' : 'Add New Book' }}</h5>
+                <button type="button" class="btn-close" (click)="closeModal()"></button>
+            </div>
+            <div class="modal-body">
+                <form (ngSubmit)="saveBook()">
+                    <div class="mb-3">
+                        <label class="form-label">Title</label>
+                        <input type="text" class="form-control" [(ngModel)]="newBook.title" name="title" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Author</label>
+                        <input type="text" class="form-control" [(ngModel)]="newBook.author" name="author" required>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Category</label>
+                            <select class="form-select" [(ngModel)]="newBook.category" name="category" required>
+                                <option *ngFor="let cat of categories" [value]="cat.id">{{ cat.name }}</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">ISBN</label>
+                            <input type="text" class="form-control" [(ngModel)]="newBook.isbn" name="isbn">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Total Qty</label>
+                            <input type="number" class="form-control" [(ngModel)]="newBook.quantity" name="quantity"
+                                required>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Available</label>
+                            <input type="number" class="form-control" [(ngModel)]="newBook.available" name="available"
+                                required>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Price</label>
+                            <input type="number" class="form-control" [(ngModel)]="newBook.price" name="price">
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-end">
+                        <button type="button" class="btn btn-secondary me-2" (click)="closeModal()">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

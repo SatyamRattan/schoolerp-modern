@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { LucideAngularModule, Users, GraduationCap, DollarSign, CalendarCheck } from 'lucide-angular';
+import { RouterModule } from '@angular/router';
+import { LucideAngularModule, Users, GraduationCap, DollarSign, CalendarCheck, BarChart3, Plus, Check } from 'lucide-angular';
 
 @Component({
     selector: 'app-dashboard',
     standalone: true,
-    imports: [CommonModule, LucideAngularModule],
+    imports: [CommonModule, LucideAngularModule, RouterModule],
     templateUrl: './dashboard.html',
     styleUrls: ['./dashboard.css']
 })
@@ -14,6 +15,9 @@ export class DashboardComponent {
     readonly staffIcon = GraduationCap;
     readonly feesIcon = DollarSign;
     readonly attendanceIcon = CalendarCheck;
+    readonly AnalyticsIcon = BarChart3;
+    readonly Plus = Plus;
+    readonly Check = Check;
 
     stats = [
         { label: 'Total Students', value: '1,240', change: '+12%', icon: this.studentIcon, color: 'primary' },

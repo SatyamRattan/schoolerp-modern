@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import OrganisationInfo, AdminAccount, Owner, ContactUs, Feedback, Terms, Route, RoutePlan
+from .models import OrganisationInfo, AdminAccount, Owner, ContactUs, Feedback, Terms, Route, RoutePlan, AcademicYear
 
 class OrganisationInfoSerializer(serializers.ModelSerializer):
     class Meta:
@@ -39,4 +39,9 @@ class RouteSerializer(serializers.ModelSerializer):
 class RoutePlanSerializer(serializers.ModelSerializer):
     class Meta:
         model = RoutePlan
+        fields = '__all__'
+
+class AcademicYearSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AcademicYear
         fields = '__all__'

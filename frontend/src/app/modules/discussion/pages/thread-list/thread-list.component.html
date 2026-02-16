@@ -1,0 +1,55 @@
+<div class="p-6 bg-slate-50 min-h-screen">
+    <div class="flex justify-between items-center mb-6">
+        <div>
+            <h1 class="text-2xl font-bold text-slate-900 mb-2">Discussion Forum</h1>
+            <p class="text-slate-600">Collaborate and discuss with peers and teachers.</p>
+        </div>
+        <a routerLink="create"
+            class="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors duration-200">
+            <lucide-icon name="plus" class="w-5 h-5"></lucide-icon>
+            New Discussion
+        </a>
+    </div>
+
+    <div class="space-y-4">
+        <div *ngIf="loading" class="text-center py-8 text-slate-500">
+            Loading discussions...
+        </div>
+
+        <div *ngIf="!loading && threads.length === 0"
+            class="text-center py-12 bg-white rounded-xl shadow-sm border border-slate-200">
+            <lucide-icon name="message-square" class="w-12 h-12 text-slate-300 mx-auto mb-3"></lucide-icon>
+            <h3 class="text-lg font-medium text-slate-900">No discussions yet</h3>
+            <p class="text-slate-500">Be the first to start a conversation!</p>
+        </div>
+
+        <!-- Thread Card -->
+        <div *ngFor="let thread of threads" [routerLink]="['/discussion', thread.id]"
+            class="block p-6 bg-white rounded-xl shadow-sm border border-slate-200 hover:shadow-md transition-shadow cursor-pointer">
+            <div class="flex justify-between items-start mb-2">
+                <h3 class="text-lg font-semibold text-slate-900 group-hover:text-indigo-600 line-clamp-1">
+                    {{thread.title}}</h3>
+                <span class="text-xs text-slate-500 whitespace-nowrap">{{thread.created_at | date:'mediumDate'}}</span>
+            </div>
+            <p class="text-slate-600 mb-4 line-clamp-2">{{thread.content}}</p>
+
+            <div class="flex items-center justify-between text-sm text-slate-500 border-t border-slate-100 pt-4">
+                <div class="flex items-center gap-2">
+                    <div
+                        class="w-6 h-6 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-700 font-medium text-xs">
+                        {{thread.author_details?.username?.charAt(0)?.toUpperCase() || 'U'}}
+                    </div>
+                    <span>{{thread.author_details?.username || 'Unknown Author'}}</span>
+                </div>
+                <div class="flex items-center gap-4">
+                    <span class="flex items-center gap-1">
+                        {{thread.views_count}} Views
+                    </span>
+                    <span class="flex items-center gap-1 font-medium text-indigo-600">
+                        {{thread.reply_count}} Replies
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

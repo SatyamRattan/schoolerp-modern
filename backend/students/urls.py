@@ -5,7 +5,7 @@ from .views import (
     CasteViewSet, CategoryViewSet, HouseViewSet, 
     FamilyViewSet, GatePassViewSet, 
     StudentLeavingCertificateViewSet, AssessmentViewSet, 
-    SubjectViewSet, TermViewSet
+    SubjectViewSet, TermViewSet, AdmissionViewSet
 )
 from .pdf_views import TransferCertificatePDFView, CharacterCertificatePDFView
 
@@ -22,6 +22,7 @@ router.register(r'slc', StudentLeavingCertificateViewSet)
 router.register(r'assessments', AssessmentViewSet)
 router.register(r'subjects', SubjectViewSet)
 router.register(r'terms', TermViewSet)
+router.register(r'admissions', AdmissionViewSet, basename='admission')
 
 urlpatterns = [
     path('', include(router.urls)),

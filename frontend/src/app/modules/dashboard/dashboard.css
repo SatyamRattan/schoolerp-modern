@@ -1,19 +1,64 @@
-.stat-icon lucide-icon {
+.activity-dot-v {
+    width: 6px;
+    height: 6px;
+    background: var(--primary);
+    border-radius: 50%;
+    z-index: 1;
+}
+
+.activity-item::before {
+    content: '';
+    position: absolute;
+    left: 2px;
+    top: 10px;
+    bottom: -20px;
+    width: 1px;
+    background: var(--border-color);
+    z-index: 0;
+}
+
+.activity-item:last-child::before {
+    display: none;
+}
+
+.size-64 {
+    width: 64px;
+    height: 64px;
+}
+
+.size-24 {
     width: 24px;
     height: 24px;
 }
 
-.placeholder-chart {
-    border: 2px dashed #e2e8f0;
-}
-
-.activity-dot {
-    width: 10px;
-    height: 10px;
-    background: var(--primary-color);
-    border-radius: 50%;
+.size-18 {
+    width: 18px;
+    height: 18px;
 }
 
 .tiny {
     font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.bg-primary-subtle {
+    background-color: #eef2ff;
+    color: #4338ca;
+}
+
+.bg-success-subtle {
+    background-color: #ecfdf5;
+    color: #059669;
+}
+
+.bg-warning-subtle {
+    background-color: #fffbeb;
+    color: #d97706;
+}
+
+.bg-danger-subtle {
+    background-color: #fef2f2;
+    color: #dc2626;
 }

@@ -1,0 +1,94 @@
+<div class="row">
+    <!-- Issue Book Form -->
+    <div class="col-md-4">
+        <div class="card card-body border-0 shadow mb-4">
+            <h2 class="h5 mb-4">Issue Book</h2>
+            <form (ngSubmit)="issueBook()">
+                <div class="mb-3">
+                    <label class="form-label">Select Student (Member)</label>
+                    <div class="input-group">
+                        <select class="form-select" [(ngModel)]="selectedMember" name="member" required>
+                            <option *ngFor="let m of members" [value]="m.id">
+                                {{ m.student_details?.student_first_name }} ({{ m.student_details?.admission_no }})
+                            </option>
+                        </select>
+                        <button type="button" class="btn btn-outline-secondary" (click)="syncMembers()"
+                            title="Sync from Students">
+                            <lucide-angular [img]="RotateCcw" class="icon icon-xs"></lucide-angular>
+                        </button>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Select Book</label>
+                    <select class="form-select" [(ngModel)]="selectedBook" name="book" required>
+                        <option *ngFor="let b of books" [value]="b.id">
+                            {{ b.title }} ({{ b.author }})
+                        </option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Issue Date</label>
+                    <input type="date" class="form-control" [(ngModel)]="issueDate" name="issueDate"
+                        (change)="calculateDueDate()">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Due Date</label>
+                    <input type="date" class="form-control" [(ngModel)]="dueDate" name="dueDate">
+                </div>
+                <button type="submit" class="btn btn-primary w-100" [disabled]="!selectedMember || !selectedBook">Issue
+                    Book</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Active Issues List -->
+    <div class="col-md-8">
+        <div class="card card-body border-0 shadow mb-4">
+            <h2 class="h5 mb-4">Issued Books (Active & Logs)</h2>
+            <div class="table-responsive">
+                <table class="table table-centered table-nowrap mb-0 rounded">
+                    <thead class="thead-light">
+                        <tr>
+                            <th class="border-0 rounded-start">Book</th>
+                            <th class="border-0">Student</th>
+                            <th class="border-0">Due Date</th>
+                            <th class="border-0">Status</th>
+                            <th class="border-0 rounded-end">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let issue of issues">
+                            <td class="fw-bold">{{ issue.book_title }}</td>
+                            <td>{{ issue.member_name }} <span class="text-muted small">({{ issue.member_id_card
+                                    }})</span></td>
+                            <td>
+                                {{ issue.due_date }}
+                                <span *ngIf="issue.status === 'OVERDUE'" class="text-danger small">(Overdue)</span>
+                            </td>
+                            <td>
+                                <span class="badge" [ngClass]="{
+                                    'bg-success': issue.status === 'RETURNED',
+                                    'bg-warning': issue.status === 'ISSUED',
+                                    'bg-danger': issue.status === 'OVERDUE'
+                                }">{{ issue.status }}</span>
+                            </td>
+                            <td>
+                                <button *ngIf="issue.status !== 'RETURNED'" class="btn btn-sm btn-outline-success"
+                                    (click)="returnBook(issue.id!)">
+                                    Return
+                                </button>
+                                <span *ngIf="issue.status === 'RETURNED' && issue.fine_amount > '0.00'"
+                                    class="text-danger small">
+                                    Fine: {{ issue.fine_amount }}
+                                </span>
+                            </td>
+                        </tr>
+                        <tr *ngIf="issues.length === 0 && !loading">
+                            <td colspan="5" class="text-center py-4">No records found.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

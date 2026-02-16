@@ -1,78 +1,108 @@
-<div class="p-4">
+<div class="attendance-container p-4 animate-fade-in">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
-            <h2 class="fw-bold mb-1">Daily Attendance</h2>
-            <p class="text-muted small mb-0">Record and manage daily student presence</p>
+            <h2 class="fw-bold mb-1">Attendance Desk</h2>
+            <p class="text-muted small mb-0">Select class and section to begin marking attendance</p>
         </div>
         <div class="d-flex gap-2">
-            <button class="btn btn-outline-primary border-2 fw-bold px-4 py-2 rounded-3" (click)="saveAttendance()">
-                Save Attendance
+            <button class="btn btn-light bg-white shadow-sm border">
+                <i class="bi bi-download me-2"></i> Export Report
+            </button>
+            <button class="btn btn-primary shadow" (click)="saveAttendance()" [disabled]="students.length === 0">
+                <i class="bi bi-cloud-check me-2"></i> Save attendance
             </button>
         </div>
     </div>
 
-    <div class="premium-card p-4 mb-4">
-        <div class="row g-3">
-            <div class="col-12 col-md-3">
-                <label class="form-label small fw-bold text-muted">DATE</label>
-                <input type="date" [(ngModel)]="selectedDate" class="form-control bg-light border-0 py-2">
-            </div>
-            <div class="col-12 col-md-3">
-                <label class="form-label small fw-bold text-muted">CLASS</label>
-                <select [(ngModel)]="selectedClass" class="form-select bg-light border-0 py-2">
-                    <option value="10">Class 10</option>
-                    <option value="9">Class 9</option>
+    <!-- Filter Card -->
+    <div class="premium-card mb-4 bg-white border-0 shadow-sm">
+        <div class="row g-3 align-items-end">
+            <div class="col-md-3">
+                <label class="form-label small fw-bold text-muted">Academic Class</label>
+                <select class="form-select" [(ngModel)]="selectedClass">
+                    <option [value]="null">Select Class</option>
+                    <option *ngFor="let cls of classes" [value]="cls.id">Class {{cls.class_num}}</option>
                 </select>
             </div>
-            <div class="col-12 col-md-3">
-                <label class="form-label small fw-bold text-muted">SECTION</label>
-                <select [(ngModel)]="selectedSection" class="form-select bg-light border-0 py-2">
-                    <option value="A">Section A</option>
-                    <option value="B">Section B</option>
+            <div class="col-md-3">
+                <label class="form-label small fw-bold text-muted">Section</label>
+                <select class="form-select" [(ngModel)]="selectedSection">
+                    <option [value]="null">Select Section</option>
+                    <option *ngFor="let sec of sections" [value]="sec.id">{{sec.section_name}}</option>
                 </select>
             </div>
-            <div class="col-12 col-md-3 d-flex align-items-end">
-                <button class="btn btn-primary w-100 py-2">Fetch Student List</button>
+            <div class="col-md-3">
+                <label class="form-label small fw-bold text-muted">Attendance Date</label>
+                <input type="date" class="form-control" [(ngModel)]="attendanceDate">
+            </div>
+            <div class="col-md-3 text-end">
+                <button class="btn btn-primary w-100" (click)="loadStudents()">
+                    <lucide-icon [name]="searchIcon" class="size-18 me-2"></lucide-icon>
+                    Load Register
+                </button>
             </div>
         </div>
     </div>
 
-    <div class="premium-card p-0 overflow-hidden">
+    <!-- Students Register -->
+    <div *ngIf="students.length > 0" class="premium-card p-0 overflow-hidden border-0 shadow-sm animate-fade-in">
+        <div
+            class="bg-primary bg-opacity-10 p-3 px-4 d-flex justify-content-between align-items-center border-bottom border-primary border-opacity-10">
+            <h6 class="m-0 fw-bold text-primary">Student Register: Class {{selectedClass}} - {{selectedSection}}</h6>
+            <div class="d-flex gap-3">
+                <div class="small fw-bold text-success"><i class="bi bi-person-check-fill me-1"></i> Present:
+                    {{getStats().present}}</div>
+                <div class="small fw-bold text-danger"><i class="bi bi-person-x-fill me-1"></i> Absent:
+                    {{getStats().absent}}</div>
+            </div>
+        </div>
+
         <div class="table-responsive">
             <table class="table table-hover mb-0 align-middle">
-                <thead class="bg-light">
+                <thead class="bg-light bg-opacity-50">
                     <tr>
-                        <th class="ps-4 py-3 text-muted small fw-bold text-uppercase">Roll No</th>
-                        <th class="py-3 text-muted small fw-bold text-uppercase">Student Name</th>
-                        <th class="py-3 text-muted small fw-bold text-uppercase text-center">Status</th>
-                        <th class="py-3 text-muted small fw-bold text-uppercase text-end pe-4">Actions</th>
+                        <th class="ps-4">Roll No</th>
+                        <th>Student Name</th>
+                        <th class="text-center">Status</th>
+                        <th>Remarks</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr *ngFor="let s of students">
-                        <td class="ps-4 py-3 fw-bold text-muted">{{s.roll}}</td>
-                        <td class="py-3">
-                            <div class="fw-bold">{{s.name}}</div>
-                        </td>
-                        <td class="py-3 text-center">
-                            <span class="status-badge"
-                                [ngClass]="{'present': s.status === 'P', 'absent': s.status === 'A', 'leave': s.status === 'L'}">
-                                {{s.status === 'P' ? 'Present' : s.status === 'A' ? 'Absent' : 'Leave'}}
-                            </span>
-                        </td>
-                        <td class="py-3 text-end pe-4">
-                            <div class="btn-group shadow-sm">
-                                <button class="btn btn-sm" [class.btn-success]="s.status === 'P'"
-                                    [class.btn-light]="s.status !== 'P'" (click)="setStatus(s.id, 'P')">P</button>
-                                <button class="btn btn-sm" [class.btn-danger]="s.status === 'A'"
-                                    [class.btn-light]="s.status !== 'A'" (click)="setStatus(s.id, 'A')">A</button>
-                                <button class="btn btn-sm" [class.btn-warning]="s.status === 'L'"
-                                    [class.btn-light]="s.status !== 'L'" (click)="setStatus(s.id, 'L')">L</button>
+                        <td class="ps-4 fw-bold text-muted">{{s.student_roll_no}}</td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div
+                                    class="avatar-sm bg-light text-primary rounded-circle me-3 d-flex align-items-center justify-content-center fw-bold small">
+                                    {{s.student_first_name[0]}}
+                                </div>
+                                <span class="fw-600">{{s.student_first_name}} {{s.student_last_name}}</span>
                             </div>
+                        </td>
+                        <td class="text-center">
+                            <div class="btn-group shadow-sm rounded-pill overflow-hidden border p-1 bg-white">
+                                <button class="btn btn-sm px-3 rounded-pill"
+                                    [class.btn-success]="s.status === 'PRESENT'"
+                                    [class.btn-light]="s.status !== 'PRESENT'" (click)="s.status = 'PRESENT'">P</button>
+                                <button class="btn btn-sm px-3 rounded-pill" [class.btn-danger]="s.status === 'ABSENT'"
+                                    [class.btn-light]="s.status !== 'ABSENT'" (click)="s.status = 'ABSENT'">A</button>
+                                <button class="btn btn-sm px-3 rounded-pill" [class.btn-warning]="s.status === 'LEAVE'"
+                                    [class.btn-light]="s.status !== 'LEAVE'" (click)="s.status = 'LEAVE'">L</button>
+                            </div>
+                        </td>
+                        <td>
+                            <input type="text" class="form-control form-control-sm border-0 bg-light"
+                                placeholder="Optional remark..." [(ngModel)]="s.remarks">
                         </td>
                     </tr>
                 </tbody>
             </table>
         </div>
+    </div>
+
+    <!-- Empty State -->
+    <div *ngIf="students.length === 0" class="text-center py-5">
+        <lucide-icon [name]="attendanceIcon" class="size-64 text-muted opacity-20 mb-3"></lucide-icon>
+        <p class="text-muted">Register is empty. Please select a class and section above.</p>
     </div>
 </div>

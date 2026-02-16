@@ -1,0 +1,48 @@
+.calendar-grid {
+    background: white;
+}
+
+.calendar-header-row {
+    grid-template-columns: repeat(7, 1fr);
+}
+
+.calendar-body-grid {
+    grid-template-columns: repeat(7, 1fr);
+}
+
+.calendar-day {
+    transition: var(--transition);
+}
+
+.calendar-day:hover {
+    background: var(--bg-body) !important;
+}
+
+.event-pill {
+    cursor: pointer;
+    transition: var(--transition);
+    border: 1px solid rgba(0, 0, 0, 0.02);
+}
+
+.event-pill:hover {
+    transform: translateX(4px);
+    filter: brightness(0.95);
+}
+
+.legend-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 4px;
+}
+
+.tracking-wider {
+    letter-spacing: 0.1em;
+}
+
+.calendar-day:nth-child(7n) {
+    border-right: none !important;
+}
+
+.calendar-day:nth-child(7n+1) {
+    border-left: none !important;
+}

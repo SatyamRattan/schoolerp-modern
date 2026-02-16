@@ -1,0 +1,63 @@
+<div class="notices-container p-4">
+    <div class="row mb-4 align-items-center">
+        <div class="col-md-5">
+            <h2 class="fw-bold mb-1">Bulletin Board</h2>
+            <p class="text-muted small mb-0">Stay updated with the latest school news and official notices.</p>
+        </div>
+        <div class="col-md-7 d-flex gap-3 align-items-center">
+            <div class="search-box position-relative flex-grow-1" style="max-width: 400px;">
+                <lucide-icon [name]="Search" class="search-icon size-16"></lucide-icon>
+                <input type="text" class="form-control ps-5" placeholder="Search notices..." [(ngModel)]="searchQuery">
+            </div>
+            <button class="btn btn-primary px-4 d-flex align-items-center gap-2" (click)="addNotice()">
+                <lucide-icon [name]="Plus" class="size-18"></lucide-icon>
+                Post Notice
+            </button>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <div *ngFor="let notice of filteredNotices" class="col-md-6 col-lg-4">
+            <div class="premium-card h-100 p-4 d-flex flex-column animate-fade-in cursor-pointer"
+                (click)="showNoticeDetail(notice)">
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                    <div class="notice-badge px-3 py-1 rounded-pill small fw-bold"
+                        [ngClass]="getBadgeClass(notice.type)">
+                        <lucide-icon [name]="getIcon(notice.type)" class="size-14 me-1"></lucide-icon>
+                        {{ notice.type | titlecase }}
+                    </div>
+                    <div class="action-buttons d-flex gap-2">
+                        <button class="btn-icon-sm" (click)="editNotice(notice, $event)" title="Edit">
+                            <lucide-icon [name]="Edit" class="size-14"></lucide-icon>
+                        </button>
+                        <button class="btn-icon-sm text-danger" (click)="deleteNotice(notice.id, $event)"
+                            title="Delete">
+                            <lucide-icon [name]="Trash" class="size-14"></lucide-icon>
+                        </button>
+                    </div>
+                </div>
+
+                <h5 class="fw-bold text-main mb-3">{{ notice.title }}</h5>
+                <p class="text-muted small flex-grow-1 line-clamp-3">{{ notice.content }}</p>
+
+                <div class="mt-4 pt-3 border-top d-flex align-items-center justify-content-between">
+                    <div class="d-flex align-items-center">
+                        <div class="sender-avatar me-2">{{ notice.sender[0] }}</div>
+                        <div class="d-flex flex-column">
+                            <span class="tiny fw-bold text-secondary">{{ notice.sender }}</span>
+                            <span class="tiny text-muted">{{ notice.date | date:'mediumDate' }}</span>
+                        </div>
+                    </div>
+                    <button class="btn btn-link btn-sm p-0 text-primary text-decoration-none fw-bold tiny"
+                        (click)="showNoticeDetail(notice)">READ MORE</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Empty State -->
+    <div *ngIf="filteredNotices.length === 0" class="text-center py-5">
+        <lucide-icon [name]="Bell" class="size-48 text-muted opacity-25 mb-3"></lucide-icon>
+        <h5 class="text-muted">No notices found matching your search.</h5>
+    </div>
+</div>

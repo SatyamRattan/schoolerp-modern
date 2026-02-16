@@ -1,0 +1,73 @@
+<div class="p-6 bg-slate-50 min-h-screen">
+    <div class="max-w-3xl mx-auto">
+        <button routerLink="/lms/quizzes"
+            class="flex items-center text-slate-600 hover:text-indigo-600 mb-6 transition-colors">
+            <lucide-icon [img]="backIcon" class="w-4 h-4 mr-2"></lucide-icon>
+            Back to Quizzes
+        </button>
+
+        <div *ngIf="loading" class="text-center py-12 text-slate-500">
+            Loading quiz...
+        </div>
+
+        <div *ngIf="!loading && quiz" class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+            <div class="p-6 border-b border-slate-100">
+                <h1 class="text-2xl font-bold text-slate-900 mb-2">{{quiz.title}}</h1>
+                <p class="text-slate-600">{{quiz.description}}</p>
+            </div>
+
+            <!-- Result View -->
+            <div *ngIf="result" class="p-8 text-center bg-green-50 border-b border-green-100">
+                <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-green-100 mb-4">
+                    <lucide-icon [img]="checkIcon" class="w-8 h-8 text-green-600"></lucide-icon>
+                </div>
+                <h2 class="text-2xl font-bold text-slate-900 mb-2">Quiz Completed!</h2>
+                <p class="text-lg text-slate-700">
+                    You scored <span class="font-bold text-green-700">{{result.score}}</span> out of <span
+                        class="font-bold">{{result.total}}</span>
+                </p>
+                <button routerLink="/lms/quizzes"
+                    class="mt-6 px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors">
+                    Take Another Quiz
+                </button>
+            </div>
+
+            <!-- Questions View -->
+            <div *ngIf="!result && questions.length > 0" class="p-6 space-y-8">
+                <div *ngFor="let question of questions; let i = index" class="space-y-4">
+                    <h3 class="text-lg font-medium text-slate-900">
+                        <span class="text-slate-500 mr-2">{{i + 1}}.</span>
+                        {{question.text}}
+                    </h3>
+
+                    <div class="space-y-2 pl-6">
+                        <label *ngFor="let choice of question.choices"
+                            class="flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-colors"
+                            [class.border-indigo-500]="isAnswerSelected(question.id, choice.id)"
+                            [class.bg-indigo-50]="isAnswerSelected(question.id, choice.id)"
+                            [class.border-slate-200]="!isAnswerSelected(question.id, choice.id)"
+                            (click)="selectAnswer(question.id, choice.id)">
+                            <div class="w-4 h-4 rounded-full border border-slate-400 flex items-center justify-center"
+                                [class.border-indigo-600]="isAnswerSelected(question.id, choice.id)">
+                                <div *ngIf="isAnswerSelected(question.id, choice.id)"
+                                    class="w-2 h-2 rounded-full bg-indigo-600"></div>
+                            </div>
+                            <span class="text-slate-700">{{choice.text}}</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="pt-6 border-t border-slate-100 flex justify-end">
+                    <button (click)="submitQuiz()" [disabled]="submitting"
+                        class="px-8 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg transition-colors shadow-sm disabled:opacity-50 disabled:cursor-not-allowed">
+                        {{ submitting ? 'Submitting...' : 'Submit Quiz' }}
+                    </button>
+                </div>
+            </div>
+
+            <div *ngIf="!result && questions.length === 0" class="p-12 text-center text-slate-500">
+                No questions found for this quiz.
+            </div>
+        </div>
+    </div>
+</div>

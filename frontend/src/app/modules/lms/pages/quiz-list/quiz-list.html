@@ -1,0 +1,32 @@
+<div class="p-6 bg-slate-50 min-h-screen">
+    <div class="mb-6">
+        <h1 class="text-2xl font-bold text-slate-900 mb-2">Quizzes</h1>
+        <p class="text-slate-600">Test your knowledge with these quizzes</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div *ngIf="quizzes.length === 0"
+            class="col-span-full p-8 text-center bg-white rounded-lg border border-slate-200 text-slate-500">
+            No quizzes available at the moment.
+        </div>
+
+        <div *ngFor="let quiz of quizzes"
+            class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden hover:shadow-md transition-shadow">
+            <div class="p-5">
+                <div class="flex justify-between items-start mb-4">
+                    <span class="inline-flex items-center justify-center p-2 bg-purple-50 rounded-lg text-purple-600">
+                        <lucide-icon [img]="quizIcon" class="w-6 h-6"></lucide-icon>
+                    </span>
+                </div>
+                <h3 class="text-lg font-semibold text-slate-900 mb-2">{{quiz.title}}</h3>
+                <p class="text-sm text-slate-600 mb-4 line-clamp-2">{{quiz.description}}</p>
+
+                <a [routerLink]="['/lms/quiz', quiz.id]"
+                    class="flex items-center justify-center w-full py-2.5 px-4 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-lg transition-colors">
+                    Start Quiz
+                    <lucide-icon [img]="arrowIcon" class="w-4 h-4 ml-2"></lucide-icon>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

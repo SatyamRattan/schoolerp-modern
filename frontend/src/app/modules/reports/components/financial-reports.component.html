@@ -146,31 +146,4 @@
         </div>
     </div>
 
-    <!-- Certificate Generation Section -->
-    <div class="card mt-4">
-        <div class="card-header">
-            <h5>Student Certificates</h5>
-        </div>
-        <div class="card-body">
-            <div class="row">
-                <div class="col-md-6">
-                    <label for="studentId" class="form-label">Student ID</label>
-                    <input type="number" class="form-control" id="studentId" [(ngModel)]="studentId"
-                        placeholder="Enter student ID">
-                </div>
-            </div>
-            <div class="row mt-3">
-                <div class="col-md-6">
-                    <button class="btn btn-primary w-100" (click)="downloadTransferCertificate()">
-                        <i class="bi bi-file-pdf"></i> Download Transfer Certificate
-                    </button>
-                </div>
-                <div class="col-md-6">
-                    <button class="btn btn-success w-100" (click)="downloadCharacterCertificate()">
-                        <i class="bi bi-file-pdf"></i> Download Character Certificate
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
 </div>

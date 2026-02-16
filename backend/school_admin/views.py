@@ -1,9 +1,9 @@
 from rest_framework import viewsets
-from .models import OrganisationInfo, AdminAccount, Owner, ContactUs, Feedback, Terms, Route, RoutePlan
+from .models import OrganisationInfo, AdminAccount, Owner, ContactUs, Feedback, Terms, Route, RoutePlan, AcademicYear
 from .serializers import (
     OrganisationInfoSerializer, AdminAccountSerializer, OwnerSerializer, 
     ContactUsSerializer, FeedbackSerializer, TermsSerializer, 
-    RouteSerializer, RoutePlanSerializer
+    RouteSerializer, RoutePlanSerializer, AcademicYearSerializer
 )
 
 class OrganisationInfoViewSet(viewsets.ModelViewSet):
@@ -37,3 +37,7 @@ class RouteViewSet(viewsets.ModelViewSet):
 class RoutePlanViewSet(viewsets.ModelViewSet):
     queryset = RoutePlan.objects.all()
     serializer_class = RoutePlanSerializer
+
+class AcademicYearViewSet(viewsets.ModelViewSet):
+    queryset = AcademicYear.objects.all()
+    serializer_class = AcademicYearSerializer

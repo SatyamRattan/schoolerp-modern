@@ -1,0 +1,93 @@
+<div class="row">
+    <div class="col-12">
+        <div class="card card-body border-0 shadow mb-4">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2 class="h5">Vehicle Management</h2>
+                <button class="btn btn-primary" (click)="openAddModal()">
+                    <lucide-angular [img]="Plus" class="icon icon-xs me-2"></lucide-angular> Add Vehicle
+                </button>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-centered table-nowrap mb-0 rounded">
+                    <thead class="thead-light">
+                        <tr>
+                            <th class="border-0">Reg. Number</th>
+                            <th class="border-0">Driver</th>
+                            <th class="border-0">Contact</th>
+                            <th class="border-0">Capacity</th>
+                            <th class="border-0">Status</th>
+                            <th class="border-0">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let v of vehicles">
+                            <td><span class="fw-bold">{{ v.registration_number }}</span></td>
+                            <td>{{ v.driver_name }}</td>
+                            <td>{{ v.contact_number }}</td>
+                            <td>{{ v.capacity }}</td>
+                            <td>
+                                <span class="badge" [ngClass]="v.is_active ? 'bg-success' : 'bg-danger'">
+                                    {{ v.is_active ? 'Active' : 'Inactive' }}
+                                </span>
+                            </td>
+                            <td>
+                                <button class="btn btn-sm btn-link text-dark" (click)="openEditModal(v)">
+                                    <lucide-angular [img]="Edit" class="icon icon-xs"></lucide-angular>
+                                </button>
+                                <button class="btn btn-sm btn-link text-danger" (click)="deleteVehicle(v.id!)">
+                                    <lucide-angular [img]="Trash2" class="icon icon-xs"></lucide-angular>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr *ngIf="vehicles.length === 0">
+                            <td colspan="6" class="text-center py-3">No vehicles found.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Backdrop -->
+<div class="modal-backdrop fade show" *ngIf="showModal"></div>
+
+<!-- Modal -->
+<div class="modal fade show d-block" *ngIf="showModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">{{ isEditing ? 'Edit' : 'Add' }} Vehicle</h5>
+                <button type="button" class="btn-close" (click)="closeModal()"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label class="form-label">Registration Number</label>
+                    <input type="text" class="form-control" [(ngModel)]="currentVehicle.registration_number">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Driver Name</label>
+                    <input type="text" class="form-control" [(ngModel)]="currentVehicle.driver_name">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Contact Number</label>
+                    <input type="text" class="form-control" [(ngModel)]="currentVehicle.contact_number">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Capacity</label>
+                    <input type="number" class="form-control" [(ngModel)]="currentVehicle.capacity">
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" [(ngModel)]="currentVehicle.is_active"
+                        id="activeCheck">
+                    <label class="form-check-label" for="activeCheck">Active</label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" (click)="closeModal()">Close</button>
+                <button type="button" class="btn btn-primary" (click)="saveVehicle()">Save</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -2,6 +2,17 @@ from django.db import models
 
 class OrganisationInfo(models.Model):
     name = models.CharField(max_length=100)
+    # ...
+
+class AcademicYear(models.Model):
+    name = models.CharField(max_length=20) # e.g. 2023-2024
+    start_date = models.DateField()
+    end_date = models.DateField()
+    is_active = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.name
+
     address_1 = models.CharField(max_length=100)
     address_2 = models.CharField(max_length=100, blank=True)
     city = models.CharField(max_length=25)
@@ -82,3 +93,19 @@ class Route(models.Model):
 class RoutePlan(models.Model):
     route_name = models.CharField(max_length=50)
     value = models.IntegerField()
+
+class Teacher(models.Model):
+    first_name = models.CharField(max_length=50)
+    last_name = models.CharField(max_length=50)
+    email = models.EmailField(unique=True)
+    phone = models.CharField(max_length=15)
+    qualification = models.CharField(max_length=100, blank=True)
+    joining_date = models.DateField(auto_now_add=True)
+    is_active = models.BooleanField(default=True)
+
+    @property
+    def full_name(self):
+        return f"{self.first_name} {self.last_name}"
+
+    def __str__(self):
+        return self.full_name

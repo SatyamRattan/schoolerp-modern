@@ -1,0 +1,77 @@
+<div class="row">
+    <div class="col-12 col-xl-8">
+        <div class="card card-body border-0 shadow mb-4">
+            <h2 class="h5 mb-4">Create New Exam</h2>
+
+            <form [formGroup]="examForm" (ngSubmit)="onSubmit()">
+                <div class="mb-3">
+                    <label for="name" class="form-label">Exam Name</label>
+                    <input type="text" class="form-control" id="name" formControlName="name"
+                        [ngClass]="{ 'is-invalid': submitted && examForm.get('name')?.errors }">
+                    <div *ngIf="submitted && examForm.get('name')?.errors" class="invalid-feedback">
+                        Exam Name is required
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="exam_type" class="form-label">Exam Type</label>
+                        <select class="form-select" id="exam_type" formControlName="exam_type"
+                            [ngClass]="{ 'is-invalid': submitted && examForm.get('exam_type')?.errors }">
+                            <option value="">Select Type</option>
+                            <option *ngFor="let type of examTypes" [value]="type.id">{{ type.name }}</option>
+                        </select>
+                        <div *ngIf="submitted && examForm.get('exam_type')?.errors" class="invalid-feedback">
+                            Exam Type is required
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="academic_year" class="form-label">Academic Year</label>
+                        <select class="form-select" id="academic_year" formControlName="academic_year"
+                            [ngClass]="{ 'is-invalid': submitted && examForm.get('academic_year')?.errors }">
+                            <option value="">Select Year</option>
+                            <!-- TODO: Iterate over academic years -->
+                            <option value="1">2023-2024 (Mock)</option>
+                        </select>
+                        <div *ngIf="submitted && examForm.get('academic_year')?.errors" class="invalid-feedback">
+                            Academic Year is required
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="start_date" class="form-label">Start Date</label>
+                        <input type="date" class="form-control" id="start_date" formControlName="start_date"
+                            [ngClass]="{ 'is-invalid': submitted && examForm.get('start_date')?.errors }">
+                        <div *ngIf="submitted && examForm.get('start_date')?.errors" class="invalid-feedback">
+                            Start Date is required
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="end_date" class="form-label">End Date</label>
+                        <input type="date" class="form-control" id="end_date" formControlName="end_date"
+                            [ngClass]="{ 'is-invalid': submitted && examForm.get('end_date')?.errors }">
+                        <div *ngIf="submitted && examForm.get('end_date')?.errors" class="invalid-feedback">
+                            End Date is required
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-3 form-check">
+                    <input type="checkbox" class="form-check-input" id="is_active" formControlName="is_active">
+                    <label class="form-check-label" for="is_active">Active</label>
+                </div>
+
+                <div class="d-flex justify-content-end">
+                    <a routerLink="/exams" class="btn btn-gray-100 me-2">Cancel</a>
+                    <button type="submit" class="btn btn-primary" [disabled]="loading">
+                        <span *ngIf="loading" class="spinner-border spinner-border-sm me-2" role="status"
+                            aria-hidden="true"></span>
+                        Save Exam
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

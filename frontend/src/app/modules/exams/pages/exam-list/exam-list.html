@@ -1,0 +1,86 @@
+<div class="exam-list-container p-4 animate-fade-in">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold mb-1">Examinations & Assessments</h2>
+            <p class="text-muted small mb-0">Schedule exams and manage academic results</p>
+        </div>
+        <div class="d-flex gap-2">
+            <button class="btn btn-light bg-white border shadow-sm"><i class="bi bi-gear-fill me-2"></i> Grade
+                Config</button>
+            <button class="btn btn-primary shadow" (click)="openCreateModal()">
+                <lucide-icon [name]="Plus" class="size-18 me-2"></lucide-icon> New Examination
+            </button>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <!-- Active Exams Grid -->
+        <div *ngFor="let exam of exams" class="col-12 col-md-6 col-xl-4">
+            <div class="premium-card h-100 position-relative animate-fade-in">
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                    <div class="exam-type-tag bg-primary-subtle text-primary rounded-pill px-3 py-1 tiny fw-bold">
+                        {{exam.exam_type_name}}
+                    </div>
+                    <div class="dropdown">
+                        <button class="btn btn-link link-dark p-0" id="examAction" data-bs-toggle="dropdown">
+                            <lucide-icon [name]="MoreVertical" class="size-18"></lucide-icon>
+                        </button>
+                        <ul class="dropdown-menu shadow-sm border-0 rounded-3">
+                            <li><a class="dropdown-item py-2" (click)="deleteExam(exam.id!)"><i
+                                        class="bi bi-trash text-danger me-2"></i> Delete</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h4 class="mb-1 fw-bold">{{exam.name}}</h4>
+                <div class="d-flex align-items-center text-muted small mb-4">
+                    <i class="bi bi-calendar-event me-2"></i> {{exam.start_date}} to {{exam.end_date}}
+                </div>
+
+                <div class="row g-2 mb-4">
+                    <div class="col-6">
+                        <div class="p-2 bg-light rounded-3 text-center">
+                            <div class="tiny text-muted uppercase">Sessions</div>
+                            <div class="fw-bold fs-5">8</div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="p-2 bg-light rounded-3 text-center">
+                            <div class="tiny text-muted uppercase">Status</div>
+                            <div class="fw-bold text-success small" *ngIf="exam.is_active; else inactive">Active</div>
+                            <ng-template #inactive>
+                                <div class="fw-bold text-danger small">Ended</div>
+                            </ng-template>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-grid gap-2">
+                    <button [routerLink]="['/exams/schedule', exam.id]" class="btn btn-primary w-100 py-2">
+                        <i class="bi bi-calendar-check me-2"></i> Manage Schedule
+                    </button>
+
+                    <div class="d-flex gap-2">
+                        <button *ngIf="!exam.result_published" (click)="publishResult(exam.id!)"
+                            class="btn btn-success flex-grow-1 btn-sm py-2">
+                            <i class="bi bi-send me-2"></i> Publish Result
+                        </button>
+                        <button *ngIf="exam.result_published" (click)="unpublishResult(exam.id!)"
+                            class="btn btn-warning flex-grow-1 btn-sm py-2">
+                            <i class="bi bi-eye-slash me-2"></i> Unpublish
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Empty State -->
+    <div *ngIf="exams.length === 0" class="text-center py-5">
+        <div class="bg-light rounded-circle p-4 d-inline-block mb-4 shadow-sm">
+            <lucide-icon [name]="examIcon" class="size-64 text-muted opacity-30"></lucide-icon>
+        </div>
+        <h5 class="text-muted">No examinations scheduled yet</h5>
+        <button (click)="openCreateModal()" class="btn btn-primary mt-3">Schedule First Exam</button>
+    </div>
+</div>

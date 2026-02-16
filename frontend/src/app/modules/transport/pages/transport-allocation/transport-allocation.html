@@ -1,0 +1,75 @@
+<div class="row">
+    <div class="col-12">
+        <div class="card card-body border-0 shadow mb-4">
+            <h2 class="h5 mb-4">Transport Allocation</h2>
+
+            <div class="row mb-4">
+                <div class="col-md-3">
+                    <label class="form-label">Class</label>
+                    <select class="form-select" [(ngModel)]="selectedClass" (change)="onClassChange()">
+                        <option *ngFor="let c of classes" [value]="c.id">{{ c.name }}</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Section</label>
+                    <select class="form-select" [(ngModel)]="selectedSection" (change)="loadStudents()"
+                        [disabled]="!selectedClass">
+                        <option *ngFor="let s of sections" [value]="s.id">{{ s.name }}</option>
+                    </select>
+                </div>
+                <!-- Allocation Controls -->
+                <div class="col-md-6 border-start ps-4">
+                    <label class="form-label fw-bold text-primary">Assignment Details</label>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="small text-muted">Route</label>
+                            <select class="form-select form-select-sm" [(ngModel)]="selectedRoute"
+                                (change)="onRouteChange()">
+                                <option *ngFor="let r of routes" [value]="r.id">{{ r.name }}</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="small text-muted">Stop</label>
+                            <select class="form-select form-select-sm" [(ngModel)]="currentAllocation.stop">
+                                <option *ngFor="let s of availableStops" [value]="s.id">{{ s.name }} - ₹{{s.fare}}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-centered table-nowrap mb-0 rounded">
+                    <thead class="thead-light">
+                        <tr>
+                            <th class="border-0">Admission No.</th>
+                            <th class="border-0">Student Name</th>
+                            <th class="border-0">Current Transport</th>
+                            <th class="border-0">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let s of students">
+                            <td>{{ s.admission_no }}</td>
+                            <td>{{ s.student_first_name }} {{ s.student_last_name }}</td>
+                            <td>
+                                <!-- Optimally we fetch this info. For now placeholder -->
+                                <span class="text-muted small">Not Assigned</span>
+                            </td>
+                            <td>
+                                <button class="btn btn-sm btn-outline-primary" (click)="assignTransport(s.id)">
+                                    <lucide-angular [img]="ExternalLink" class="icon icon-xs me-1"></lucide-angular>
+                                    Assign
+                                </button>
+                            </td>
+                        </tr>
+                        <tr *ngIf="students.length === 0">
+                            <td colspan="4" class="text-center py-3">Select Class and Section to view students.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

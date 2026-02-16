@@ -1,0 +1,153 @@
+<div class="settings-container p-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold mb-1">System Settings</h2>
+            <p class="text-muted small mb-0">Manage school information, system preferences, and your profile.</p>
+        </div>
+        <button class="btn btn-primary px-4 d-flex align-items-center gap-2" (click)="onSave()">
+            <lucide-icon [name]="Save" class="size-18"></lucide-icon>
+            Save Changes
+        </button>
+    </div>
+
+    <div class="row g-4">
+        <!-- Sidebar Navigation for Settings -->
+        <div class="col-lg-3">
+            <div class="premium-card p-3 h-100">
+                <div class="settings-nav">
+                    <button class="nav-link w-100 d-flex align-items-center gap-3 p-3 rounded-3"
+                        [class.active]="activeTab === 'general'" (click)="activeTab = 'general'">
+                        <lucide-icon [name]="School" class="size-20"></lucide-icon>
+                        <span class="fw-600">General Info</span>
+                    </button>
+                    <button class="nav-link w-100 d-flex align-items-center gap-3 p-3 rounded-3"
+                        [class.active]="activeTab === 'profile'" (click)="activeTab = 'profile'">
+                        <lucide-icon [name]="User" class="size-20"></lucide-icon>
+                        <span class="fw-600">My Profile</span>
+                    </button>
+                    <button class="nav-link w-100 d-flex align-items-center gap-3 p-3 rounded-3"
+                        [class.active]="activeTab === 'system'" (click)="activeTab = 'system'">
+                        <lucide-icon [name]="Globe" class="size-20"></lucide-icon>
+                        <span class="fw-600">System Preferences</span>
+                    </button>
+                    <button class="nav-link w-100 d-flex align-items-center gap-3 p-3 rounded-3"
+                        [class.active]="activeTab === 'notifications'" (click)="activeTab = 'notifications'">
+                        <lucide-icon [name]="Bell" class="size-20"></lucide-icon>
+                        <span class="fw-600">Notifications</span>
+                    </button>
+                    <button class="nav-link w-100 d-flex align-items-center gap-3 p-3 rounded-3"
+                        [class.active]="activeTab === 'security'" (click)="activeTab = 'security'">
+                        <lucide-icon [name]="ShieldCheck" class="size-20"></lucide-icon>
+                        <span class="fw-600">Security</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="col-lg-9">
+            <div class="premium-card p-4 h-100 animate-fade-in" [ngSwitch]="activeTab">
+
+                <!-- General Settings -->
+                <div *ngSwitchCase="'general'">
+                    <h5 class="fw-bold mb-4">School Organization Details</h5>
+                    <div class="row g-3">
+                        <div class="col-md-12 mb-3">
+                            <div class="d-flex align-items-center gap-4">
+                                <div class="school-logo-large">{{schoolInfo.logo}}</div>
+                                <button class="btn btn-outline-primary btn-sm d-flex align-items-center gap-2">
+                                    <lucide-icon [name]="Camera" class="size-16"></lucide-icon>
+                                    Change Logo
+                                </button>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold text-muted">SCHOOL NAME</label>
+                            <input type="text" class="form-control" [(ngModel)]="schoolInfo.name">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold text-muted">SCHOOL EMAIL</label>
+                            <input type="email" class="form-control" [(ngModel)]="schoolInfo.email">
+                        </div>
+                        <div class="col-md-12">
+                            <label class="form-label small fw-bold text-muted">ADDRESS</label>
+                            <input type="text" class="form-control" [(ngModel)]="schoolInfo.address">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold text-muted">PHONE</label>
+                            <input type="text" class="form-control" [(ngModel)]="schoolInfo.phone">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold text-muted">WEBSITE</label>
+                            <input type="text" class="form-control" [(ngModel)]="schoolInfo.website">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Profile Settings -->
+                <div *ngSwitchCase="'profile'">
+                    <h5 class="fw-bold mb-4">Personal Administrator Account</h5>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold text-muted">FULL NAME</label>
+                            <input type="text" class="form-control" [(ngModel)]="profileInfo.name">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold text-muted">ROLE</label>
+                            <input type="text" class="form-control" [(ngModel)]="profileInfo.role" readonly disabled>
+                        </div>
+                        <div class="col-md-12">
+                            <label class="form-label small fw-bold text-muted">EMAIL ADDRESS</label>
+                            <input type="email" class="form-control" [(ngModel)]="profileInfo.email">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- System Preferences -->
+                <div *ngSwitchCase="'system'">
+                    <h5 class="fw-bold mb-4">System & Regional Preferences</h5>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold text-muted">CURRENT ACADEMIC YEAR</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-white border-end-0">
+                                    <lucide-icon [name]="Calendar" class="size-18 text-muted"></lucide-icon>
+                                </span>
+                                <select class="form-select border-start-0" [(ngModel)]="systemPrefs.academicYear">
+                                    <option value="2024-25">2024-25</option>
+                                    <option value="2025-26">2025-26</option>
+                                    <option value="2026-27">2026-27</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold text-muted">TIMEZONE</label>
+                            <select class="form-select" [(ngModel)]="systemPrefs.timezone">
+                                <option value="UTC +5:30">India (UTC +5:30)</option>
+                                <option value="UTC +0:00">Universal (UTC +0:00)</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold text-muted">PREFERRED LANGUAGE</label>
+                            <select class="form-select" [(ngModel)]="systemPrefs.language">
+                                <option value="English">English</option>
+                                <option value="Spanish">Spanish</option>
+                                <option value="French">French</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Placeholder for others -->
+                <div *ngSwitchDefault>
+                    <div class="text-center py-5">
+                        <lucide-icon [name]="activeTab === 'security' ? ShieldCheck : Bell"
+                            class="size-48 text-muted opacity-25 mb-3"></lucide-icon>
+                        <h6 class="text-muted">Settings for {{activeTab}} are under maintenance.</h6>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

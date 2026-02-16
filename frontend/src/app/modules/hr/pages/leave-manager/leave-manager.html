@@ -1,0 +1,104 @@
+<div class="row">
+    <div class="col-12">
+        <div class="card card-body border-0 shadow mb-4">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2 class="h5">Leave Management</h2>
+                <button class="btn btn-primary" (click)="openApplyModal()">
+                    <lucide-angular [img]="Plus" class="icon icon-xs me-2"></lucide-angular> Apply Leave
+                </button>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-centered table-nowrap mb-0 rounded">
+                    <thead class="thead-light">
+                        <tr>
+                            <th class="border-0">Staff Member</th>
+                            <th class="border-0">Type</th>
+                            <th class="border-0">Duration</th>
+                            <th class="border-0">Reason</th>
+                            <th class="border-0">Status</th>
+                            <th class="border-0">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let l of leaves">
+                            <td class="fw-bold">{{ l.staff_name }}</td>
+                            <td>{{ l.leave_type }}</td>
+                            <td>
+                                <div>{{ l.start_date | date }} - {{ l.end_date | date }}</div>
+                            </td>
+                            <td>{{ l.reason }}</td>
+                            <td>
+                                <span class="badge" [ngClass]="{
+                                    'bg-warning': l.status === 'PENDING',
+                                    'bg-success': l.status === 'APPROVED',
+                                    'bg-danger': l.status === 'REJECTED'
+                                }">{{ l.status }}</span>
+                            </td>
+                            <td>
+                                <button *ngIf="l.status === 'PENDING'" class="btn btn-sm btn-success me-2"
+                                    (click)="updateStatus(l.id!, 'APPROVED')">
+                                    <lucide-angular [img]="Check" class="icon icon-xs"></lucide-angular>
+                                </button>
+                                <button *ngIf="l.status === 'PENDING'" class="btn btn-sm btn-danger"
+                                    (click)="updateStatus(l.id!, 'REJECTED')">
+                                    <lucide-angular [img]="X" class="icon icon-xs"></lucide-angular>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr *ngIf="leaves.length === 0">
+                            <td colspan="6" class="text-center py-3">No leave requests found.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Apply Leave Modal -->
+<div class="modal fade show d-block" *ngIf="showModal" tabindex="-1" style="background: rgba(0,0,0,0.5)">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Apply for Leave</h5>
+                <button type="button" class="btn-close" (click)="showModal = false"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label class="form-label">Staff Member (Self)</label>
+                    <select class="form-select" [(ngModel)]="currentLeave.staff">
+                        <option [ngValue]="0">-- Select Yourself --</option>
+                        <option *ngFor="let s of staffList" [value]="s.id">{{ s.first_name }} {{ s.last_name }}</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Leave Type</label>
+                    <select class="form-select" [(ngModel)]="currentLeave.leave_type">
+                        <option value="CL">Casual Leave</option>
+                        <option value="SL">Sick Leave</option>
+                        <option value="EL">Earned Leave</option>
+                    </select>
+                </div>
+                <div class="row">
+                    <div class="col-6 mb-3">
+                        <label class="form-label">Start Date</label>
+                        <input type="date" class="form-control" [(ngModel)]="currentLeave.start_date">
+                    </div>
+                    <div class="col-6 mb-3">
+                        <label class="form-label">End Date</label>
+                        <input type="date" class="form-control" [(ngModel)]="currentLeave.end_date">
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Reason</label>
+                    <textarea class="form-control" rows="3" [(ngModel)]="currentLeave.reason"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" (click)="showModal = false">Cancel</button>
+                <button type="button" class="btn btn-primary" (click)="applyLeave()">Apply</button>
+            </div>
+        </div>
+    </div>
+</div>

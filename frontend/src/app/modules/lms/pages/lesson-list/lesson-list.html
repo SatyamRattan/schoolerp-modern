@@ -1,0 +1,41 @@
+<div class="p-6 bg-slate-50 min-h-screen">
+    <div class="mb-6">
+        <h1 class="text-2xl font-bold text-slate-900 mb-2">Learning Management System</h1>
+        <p class="text-slate-600">Access your lessons and learning materials</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div *ngFor="let lesson of lessons"
+            class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden hover:shadow-md transition-shadow">
+            <div class="p-5 border-b border-slate-100">
+                <div class="flex justify-between items-start mb-2">
+                    <span class="inline-flex items-center justify-center p-2 bg-indigo-50 rounded-lg text-indigo-600">
+                        <lucide-icon [img]="bookIcon" class="w-5 h-5"></lucide-icon>
+                    </span>
+                    <span class="text-sm font-medium text-slate-500">Lesson {{lesson.order}}</span>
+                </div>
+                <h3 class="text-lg font-semibold text-slate-900 mb-1">{{lesson.title}}</h3>
+                <p class="text-sm text-slate-600 line-clamp-2">{{lesson.description}}</p>
+            </div>
+
+            <div class="bg-slate-50 p-4">
+                <div class="space-y-3">
+                    <div *ngIf="lesson.topics?.length === 0" class="text-sm text-slate-500 italic">No topics available
+                    </div>
+                    <a *ngFor="let topic of lesson.topics" [routerLink]="['/lms/topic', topic.id]"
+                        class="flex items-center justify-between p-3 bg-white rounded-lg border border-slate-200 hover:border-indigo-300 hover:bg-slate-50 transition-colors group cursor-pointer">
+                        <div class="flex items-center gap-3">
+                            <lucide-icon [img]="topic.video_url ? videoIcon : pdfIcon"
+                                [class]="topic.video_url ? 'text-rose-500' : 'text-orange-500'"
+                                class="w-4 h-4"></lucide-icon>
+                            <span
+                                class="text-sm font-medium text-slate-700 group-hover:text-indigo-700 transition-colors">{{topic.title}}</span>
+                        </div>
+                        <lucide-icon [img]="arrowIcon"
+                            class="w-4 h-4 text-slate-400 group-hover:text-indigo-500"></lucide-icon>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

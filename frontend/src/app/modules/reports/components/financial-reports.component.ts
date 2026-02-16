@@ -18,7 +18,6 @@ export class FinancialReportsComponent implements OnInit {
     balanceSheet: BalanceSheetResponse | null = null;
 
     loading = false;
-    studentId: number = 1;
 
     constructor(private reportsService: ReportsService) { }
 
@@ -82,13 +81,5 @@ export class FinancialReportsComponent implements OnInit {
         }
     }
 
-    downloadTransferCertificate() {
-        const url = this.reportsService.getTransferCertificate(this.studentId);
-        window.open(url, '_blank');
-    }
-
-    downloadCharacterCertificate() {
-        const url = this.reportsService.getCharacterCertificate(this.studentId);
-        window.open(url, '_blank');
-    }
+    // Certificate methods moved to CertificatesComponent
 }

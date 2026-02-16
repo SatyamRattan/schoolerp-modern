@@ -1,0 +1,63 @@
+<div class="row">
+    <div class="col-12">
+        <div class="card card-body border-0 shadow mb-4">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="h5">Manage Time Table</h2>
+                <button class="btn btn-success" (click)="saveSchedule()"
+                    [disabled]="!selectedClass || !selectedSection">
+                    <lucide-angular [img]="Save" class="icon icon-xs me-2"></lucide-angular> Save Schedule
+                </button>
+            </div>
+
+            <div class="row mb-4">
+                <div class="col-md-5">
+                    <label class="form-label">Class</label>
+                    <select class="form-select" [(ngModel)]="selectedClass" (change)="onClassChange()">
+                        <option *ngFor="let c of classes" [value]="c.id">{{ c.name }}</option>
+                    </select>
+                </div>
+                <div class="col-md-5">
+                    <label class="form-label">Section</label>
+                    <select class="form-select" [(ngModel)]="selectedSection" (change)="loadSchedule()"
+                        [disabled]="!selectedClass">
+                        <option *ngFor="let s of sections" [value]="s.id">{{ s.name }}</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="table-responsive" *ngIf="periods.length > 0 && selectedSection">
+                <table class="table table-bordered text-center mb-0">
+                    <thead class="thead-light">
+                        <tr>
+                            <th class="border-0" style="width: 100px;">Day</th>
+                            <th *ngFor="let p of periods" class="border-0">
+                                {{ p.name }}
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let day of days; let dIndex = index">
+                            <td class="fw-bold bg-light align-middle">{{ day.name }}</td>
+                            <td *ngFor="let p of periods; let pIndex = index">
+                                <div class="d-flex flex-column gap-1">
+                                    <select class="form-select form-select-sm"
+                                        [(ngModel)]="scheduleGrid[dIndex][pIndex].subject">
+                                        <option [ngValue]="null">- Subject -</option>
+                                        <option *ngFor="let sub of subjects" [value]="sub.id">{{ sub.name }}</option>
+                                    </select>
+                                    <!-- Optional Teacher Select if we had teachers loaded -->
+                                    <!-- 
+                                    <select class="form-select form-select-sm" [(ngModel)]="scheduleGrid[dIndex][pIndex].teacher">
+                                        <option [ngValue]="null">- Teacher -</option>
+                                        <option *ngFor="let t of teachers" [value]="t.id">{{ t.first_name }}</option>
+                                    </select>
+                                    -->
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

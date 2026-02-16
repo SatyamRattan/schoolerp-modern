@@ -1,11 +1,13 @@
 <div class="app-container d-flex" [class.no-layout]="!showLayout">
-  <app-sidebar *ngIf="showLayout"></app-sidebar>
+  <app-sidebar *ngIf="showLayout" class="flex-shrink-0"></app-sidebar>
 
-  <div class="main-content flex-grow-1 d-flex flex-column">
+  <div class="main-content flex-grow-1 d-flex flex-column overflow-hidden">
     <app-header *ngIf="showLayout"></app-header>
 
-    <main class="content-area flex-grow-1 overflow-auto bg-light">
-      <router-outlet></router-outlet>
+    <main class="content-area flex-grow-1 overflow-auto">
+      <div class="container-fluid p-0 h-100">
+        <router-outlet></router-outlet>
+      </div>
     </main>
   </div>
 </div>

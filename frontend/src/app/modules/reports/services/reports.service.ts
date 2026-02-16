@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ApiService } from '../../../services/api.service';
+import { AuthService } from '../../../services/auth.service';
 import { environment } from '../../../../environments/environment';
 
 export interface TrialBalanceItem {
@@ -34,7 +36,7 @@ export interface BalanceSheetResponse {
     providedIn: 'root'
 })
 export class ReportsService {
-    constructor(private api: ApiService) { }
+    constructor(private api: ApiService, private http: HttpClient, private auth: AuthService) { }
 
     getTrialBalance(): Observable<TrialBalanceResponse> {
         return this.api.get<TrialBalanceResponse>('accounts/reports/trial-balance');
@@ -49,11 +51,13 @@ export class ReportsService {
     }
 
     // Certificate generation
-    getTransferCertificate(studentId: number): string {
-        return `${environment.apiUrl}/students/certificates/transfer/?student_id=${studentId}`;
-    }
-
-    getCharacterCertificate(studentId: number): string {
-        return `${environment.apiUrl}/students/certificates/character/?student_id=${studentId}`;
+    downloadCertificate(studentId: number, type: string): Observable<Blob> {
+        const headers = new HttpHeaders({
+            'Authorization': `Bearer ${this.auth.getToken()}`
+        });
+        return this.http.get(`${environment.apiUrl}/reports/certificate/${studentId}/${type}/`, {
+            responseType: 'blob',
+            headers: headers
+        });
     }
 }

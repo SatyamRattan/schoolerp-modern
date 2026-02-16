@@ -7,6 +7,9 @@ from accounts.models import AccountGroup, Account
 from students.models import Class, Section, Student, Caste, Category, House, Family, Subject, Assessment, Term
 from fees.models import FeesHead, FeesHeadGroup, FeesPlan, FeesReceipt
 from attendance.models import Attendance
+from enquiry.models import Enquiry
+from transport.models import Route, Vehicle
+from django.utils import timezone
 
 class Command(BaseCommand):
     help = 'Migrates data from the legacy MySQL dump to PostgreSQL'
@@ -50,7 +53,10 @@ class Command(BaseCommand):
         self.migrate_fees_heads(content)
         self.migrate_fees_plans(content)
         self.migrate_fees_receipts(content)
+        self.migrate_fees_receipts(content)
         self.migrate_attendance(content)
+        self.migrate_enquiries(content)
+        self.migrate_routes(content)
 
     def extract_inserts(self, table_name, content):
         """Helper to extract INSERT INTO statements for a given table."""
@@ -474,3 +480,51 @@ class Command(BaseCommand):
             )
             count += 1
         self.log(f'Successfully migrated {count} Terms', self.style.SUCCESS)
+
+    @transaction.atomic
+    def migrate_enquiries(self, content):
+        self.log('Migrating Enquiries (Contact Us)...')
+        contacts = self.extract_inserts('contact_us', content)
+        count = 0
+        for c in contacts:
+            Enquiry.objects.get_or_create(
+                student_name=c['name'],
+                phone=str(c['mobile']),
+                email=c['email'],
+                defaults={
+                    'class_applying_for': 'N/A',
+                    'remarks': c['message'],
+                    'status': 'NEW'
+                }
+            )
+            count += 1
+        self.log(f'Successfully migrated {count} Enquiries', self.style.SUCCESS)
+
+    @transaction.atomic
+    def migrate_routes(self, content):
+        self.log('Migrating Routes...')
+        routes = self.extract_inserts('route', content)
+        
+        # Create a default vehicle if none exists
+        default_vehicle, _ = Vehicle.objects.get_or_create(
+            registration_number='LEGACY-BUS-01',
+            defaults={
+                'driver_name': 'Unknown',
+                'contact_number': '0000000000',
+                'capacity': 50
+            }
+        )
+
+        count = 0
+        for r in routes:
+            Route.objects.get_or_create(
+                name=r['route_name'],
+                defaults={
+                    'vehicle': default_vehicle,
+                    'start_point': 'School',
+                    'end_point': r['route_name'], 
+                    'description': f"Freq: {r['freq']}"
+                }
+            )
+            count += 1
+        self.log(f'Successfully migrated {count} Routes', self.style.SUCCESS)
